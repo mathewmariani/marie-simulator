@@ -4,7 +4,7 @@ node_js:
 sudo: false
 script:
   - bash build.sh
-  - bundle exec htmlproofer ./_app --only-4xx --check-html --allow-hash-href --disable-external
+  # - bundle exec htmlproofer ./build --only-4xx --check-html --allow-hash-href --disable-external
 after_success:
   - bash gh-pages.sh
 env:
