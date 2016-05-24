@@ -24,6 +24,7 @@ gulp.task('compile_js_release', function() {
 
   // order here is important
   gulp.src([
+    './source/_js/app.js',
     './source/_js/build.js',
     './source/_js/emulator/opcodes.js',
     './source/_js/emulator/memory.js',
@@ -40,6 +41,7 @@ gulp.task('compile_js_release', function() {
 
 gulp.task('compile_js_debug', function() {
   return gulp.src([
+    './source/_js/app.js',
     './source/_js/build.js',
     './source/_js/emulator/opcodes.js',
     './source/_js/emulator/memory.js',
