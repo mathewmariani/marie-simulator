@@ -1,4 +1,5 @@
 ## Notes
+All notes show relevant code in JavaScript. Please check the cheatsheet for notes of the Marie language.
 
 ### Assembly
 The maximum amount of assembled lines of code is 2^14. This limit is set because an operand is 14 bits.
