@@ -1,0 +1,14 @@
+//- CPU settings
+li(class="dropdown")
+  a(class="dropdown-toggle" href='#' data-toggle='dropdown' role='button', aria-haspopup='true' aria-expanded='false')
+    | CPU Speed
+    span.caret
+  ul(class="dropdown-menu")
+    li
+      a(ng-click="selectSpeed(1)") 1 Hert
+    li
+      a(ng-click="selectSpeed(4)") 4 Hertz
+    li
+      a(ng-click="selectSpeed(8)") 8 Hertz
+    li
+      a(ng-click="selectSpeed(16)") 16 Hertz

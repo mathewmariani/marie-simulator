@@ -1,0 +1,4 @@
+div(class="list-group")
+  button(type="button" class="list-group-item" ng-repeat="error in assembly_errors")
+    | {{ error.msg }}
+    span(class="badge pull-right") {{ error.line }}

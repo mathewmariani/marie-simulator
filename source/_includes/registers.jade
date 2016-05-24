@@ -1,0 +1,16 @@
+div(class="panel panel-default")
+  table(class="table")
+    thead
+      tr
+        th AC
+        th IR
+        th MAR
+        th MBR
+        th PC
+    tbody
+      tr
+        td {{ cpu.AC.read() | output:16 | fixedLength:4 | uppercase }}
+        td {{ cpu.IR.read() | output:16 | fixedLength:4 | uppercase }}
+        td {{ cpu.MAR.read() | output:16 | fixedLength:4 | uppercase }}
+        td {{ cpu.MBR.read() | output:16 | fixedLength:4 | uppercase }}
+        td {{ cpu.PC.read() | output:16 | fixedLength:4 | uppercase }}

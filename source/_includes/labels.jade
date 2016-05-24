@@ -1,0 +1,13 @@
+div(class="collapse" id="collapse_labels")
+  div(class="panel panel-default")
+    table(class="table")
+      thead
+        tr
+          th Name
+          th Address
+          th Value
+      tbody
+        tr(ng-repeat="(key, value) in assembly.labels")
+          td {{ key }}
+          td {{ value | output:16 }}
+          td {{ memory.data[value] }}

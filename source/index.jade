@@ -1,0 +1,20 @@
+doctype html
+html(lang='en' ng-app='MARIESimulator')
+  head
+    include ./_includes/meta.jade
+  body(ng-controller='Ctrl')
+    include ./_includes/header.jade
+    div.container
+      div(class="row")
+        div(class="col-md-5")
+          include ./_includes/runtime.jade
+          include ./_includes/assembly.jade        
+        div(class="col-md-7")
+          include ./_includes/editor.jade
+          include ./_includes/memory.jade
+          
+    //- enable all tool tips 
+    script.
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      });

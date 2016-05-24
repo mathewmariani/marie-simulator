@@ -1,0 +1,10 @@
+//- Ouput Filter
+li(class="dropdown")
+  a(class="dropdown-toggle" href='#' data-toggle='dropdown' role='button', aria-haspopup='true' aria-expanded='false')
+    | Output Filter
+    span.caret
+  ul(class="dropdown-menu")
+    li
+      a(ng-click="selectOutputFilter(16)") Hexadecimal
+    li
+      a(ng-click="selectOutputFilter(10)") Decimal

@@ -1,0 +1,16 @@
+div(class="panel panel-default")
+  table(class="table")
+    thead
+      tr
+        th Address
+        th Label
+        th Opcode
+        th Operand
+        th Hexcode
+    tbody
+      tr(ng-repeat="item in assembly")
+        td {{ item.address | output:16 | fixedLength:4 | uppercase }}
+        td {{ item.label }}
+        td {{ item.opcode }}
+        td {{ item.operand }}
+        td {{ item.hexcode | output:16 | fixedLength:4 | uppercase }}
