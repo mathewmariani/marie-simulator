@@ -14,12 +14,13 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
 
   // memory variables
   $scope.programLoaded = false;
+  $scope.currentAddress = undefined;
 
   // cpu variables
   $scope.halted = false;
 
   // current 'sample' program
-  $scope.code = "LOAD X\nADD Y\nOUTPUT\nHALT\nX, DEC 0\nY, DEC 1";
+  $scope.code = "ORG\nLOAD X\nADD Y\nOUTPUT\nHALT\nX, DEC 0\nY, DEC 1";
 
   // reset the machine
   $scope.reset = function() {
@@ -28,6 +29,7 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
 
     $scope.isRunning = false;
     $scope.programLoaded = false;
+    $scope.assembly = [];
     $scope.assembly_errors = [];
 
     $scope.status_message = "Ready to load program instructions.";
@@ -67,17 +69,21 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
 
 
   $scope.stepForward = function() {
-    if (!$scope.programLoaded) {
-      return;
+    if ($scope.programLoaded && $scope.executeStep()) {
+      $scope.status_message = "Press [Step Forward] to continue.";
     }
-
-    $scope.status_message = "Press [Step Forward] to continue.";
-    $scope.executeStep();
   };
 
   // execute a single instruction
   $scope.executeStep = function() {
     try {
+      if (cpu.halt) {
+        return false;
+      }
+
+      // highlight current memory
+      $scope.currentAddress = cpu.PC.read();
+
       return cpu.step();
     } catch (e) {
       $scope.status_message = e;

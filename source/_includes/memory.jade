@@ -1,4 +1,5 @@
 div(class="panel panel-default" style="max-height:300px; overflow: scroll;")
-  div(class="panel-body")  
+  div(class="panel-body")
     div(class="memory-block" ng-repeat="value in memory.data track by $index" style="width:3em;display:inline-block;text-align:center;")
-      span(class="label label-default") {{ value | output:16 | fixedLength:4 | uppercase }}
+      span(class="label label-default" ng-class="{'label-info':$index == currentAddress}")
+        | {{ value | output:16 | fixedLength:4 | uppercase }}

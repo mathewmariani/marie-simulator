@@ -36,18 +36,19 @@ app.service('assembler', ['opcodes', function(opcodes) {
           "Maximum line number exceeded. Assembly halted."
       ];
 
-      // values returned
       var CODE = [];
       var LABELS = [];
 
-      var currentLine = 0;
       var ASSEMBLED = [];
       var INSTRUCTIONS = [];
       var ERROR_LIST = [];
       var FAULTY = false;
 
+      var currentLine = 0;
+      var endFlag = false;
+      var currentAssembledLine = undefined;
+
       var setError = function(id) {
-        console.log (errorMessages[id] + " | " + currentLine);
         FAULTY = true;
         ERROR_LIST.push({
           msg: errorMessages[id],
@@ -71,12 +72,18 @@ app.service('assembler', ['opcodes', function(opcodes) {
         var ref, value;
         if (instruction in opcodes) {
           ref = opcodes[instruction];
+          if (ref == opcodes.ORG && currentLine > 0) {
+            setError(0);
+          }
+
+          if (ref == opcodes.END) {
+            endFlag = true;
+          }
+
           if (ref < 0) {
             ref = 0;
           }
-          if (ref == opcodes.ORG) {
-            setError(0);
-          }
+
         } else {
           setError(3);
         }
@@ -166,8 +173,6 @@ app.service('assembler', ['opcodes', function(opcodes) {
           case opcodes.DEC:
           case opcodes.OCT:
           case opcodes.HEX:
-          case opcodes.ORG:
-          case opcodes.END:
             if (operand) {
               result = literalToDecimal(opcode, operand);
             } else {
@@ -176,6 +181,8 @@ app.service('assembler', ['opcodes', function(opcodes) {
             break;
 
           // dont require operand
+          case opcodes.ORG:
+          case opcodes.END:
           case opcodes.INPUT:
           case opcodes.OUTPUT:
           case opcodes.HALT:
@@ -201,12 +208,21 @@ app.service('assembler', ['opcodes', function(opcodes) {
           return;
         }
 
+        // NOTE: in a later version I would like to
+        // be able to store the currentAssembledLine
+        // and have the functions edit the hexcode as they see fit
+        // all the extra information would be used for saving.
+
         // [1]LABEL, [2]OPCODE [3]OPERAND
         var interpreter = regexInterpreter.exec(str);
         assembledLine["line"] = currentLine;
         assembledLine["address"] = ASSEMBLED.length;
         assembledLine["label"] = interpreter[GROUP_LABEL];
         assembledLine["opcode"] = getOpcode(interpreter[GROUP_OPCODE].toUpperCase());
+
+        // FIXME: this is just a hack for the meantime
+        assembledLine["op"] = interpreter[GROUP_OPCODE].toUpperCase();
+
         assembledLine["operand"] = getOperand(interpreter[GROUP_OPCODE], interpreter[GROUP_OPERAND]);
         assembledLine["hexcode"] = undefined;
 
@@ -228,6 +244,11 @@ app.service('assembler', ['opcodes', function(opcodes) {
       for(var i = 0; i < lines.length; ++i) {
         currentLine = i;
         parseLine(lines[i]);
+
+        // end opcode was found
+        if (endFlag) {
+          break;
+        }
       }
 
       var getLabelAddress = function(symbol) {

@@ -5,15 +5,8 @@ nav(class="navbar navbar-default")
       a(class="navbar-brand") MARIE Simulator
     
     ul(class="nav navbar-nav navbar-collapse")
-      li
-        a(href="https://github.com/mathewmariani/marie-simulator/blob/master/cheatsheet.md") Cheatsheet
-      li
-        a(href="https://github.com/mathewmariani/marie-simulator/blob/master/notes.md") Notes
-      li
-        a(href="https://gist.github.com/mathewmariani/91f471422c4ac0b5ee37") Examples        
-      li
-        a(href="https://github.com/mathewmariani/marie-simulator") Github
+      include ./header/navigation.jade
       
     ul(class="nav navbar-nav navbar-right navbar-collapse")
-      //- include header_filter.jade
-      //- include header_cpu.jade
+      //- include ./header/output_filter.jade
+      //- include ./header/cpu_speed.jade

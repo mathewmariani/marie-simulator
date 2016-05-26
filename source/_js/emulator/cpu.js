@@ -15,6 +15,7 @@ app.service('cpu', ['opcodes', 'memory', 'register_int8', 'register_int12', 'reg
       self.outputs = [];
 
       self.fault = false;
+      self.hault = false;
     },
 
     step: function() {
@@ -91,6 +92,7 @@ app.service('cpu', ['opcodes', 'memory', 'register_int8', 'register_int12', 'reg
           self.outputs.push(self.OutREG.read());
           break;
         case opcodes.HALT:
+          self.halt = true;
           throw "Machine halted normarly.";
         case opcodes.SKIPCOND:
 

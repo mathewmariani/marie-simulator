@@ -8,6 +8,6 @@ div(class="panel panel-default")
       a(ng-click="stepForward()" class="close pull-right" data-toggle="tooltip" data-placement="bottom" title="Step forward")
         span(class="fa fa-step-forward" aria-hidden="true" style="padding-right: 5px;")
 
-    include registers.jade
-    include runtime_output.jade
-    include runtime_messages.jade
+    include ./machine/registers.jade
+    include ./machine/output.jade
+    include ./machine/messages.jade
