@@ -27,8 +27,9 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
     $scope.memory.reset();
     $scope.cpu.reset();
 
-    $scope.isRunning = false;
     $scope.programLoaded = false;
+    $scope.currentAddress = undefined;
+    $scope.halted = false;
     $scope.assembly = [];
     $scope.assembly_errors = [];
 
