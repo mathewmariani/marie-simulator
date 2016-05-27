@@ -15,7 +15,7 @@ app.service('cpu', ['opcodes', 'memory', 'register_int8', 'register_int12', 'reg
       self.outputs = [];
 
       self.fault = false;
-      self.hault = false;
+      self.halt = false;
     },
 
     step: function() {

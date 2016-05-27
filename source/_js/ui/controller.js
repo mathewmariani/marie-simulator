@@ -98,7 +98,6 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
       $scope.assemble();
     }
 
-    $scope.isRunning = true;
     tick = $timeout(function () {
       if ($scope.executeStep()) {
         $scope.run();

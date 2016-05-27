@@ -1,0 +1,11 @@
+div(id="tour_MachineControll" class="panel panel-default")
+  div(class="panel-body")
+    p(class="lead") Machine Information
+      include ./machine/controls.jade
+
+    include ./machine/registers.jade
+    include ./machine/output.jade
+    include ./machine/messages.jade
+    
+    a(id="startMachineTour" class="close pull-right" aria-hidden="true")
+      span(class="fa fa-question-circle" aria-hidden="true")

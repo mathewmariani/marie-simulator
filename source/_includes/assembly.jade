@@ -1,8 +1,10 @@
-div(class="panel panel-default")
+div(id="tour_Assembly" class="panel panel-default")
   div(class="panel-body")
     p(class="lead") Assembly Information
-      a(ng-click="assemble()" class="close pull-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Assemble code")
-        span(class="fa fa-refresh" aria-hidden="true" style="padding-right: 5px;")
-    
+      include ./assembly/controls.jade
+              
     include ./assembly/errors.jade          
     include ./assembly/instructions.jade
+
+    a(id="startAssemblyTour" class="close pull-right" aria-hidden="true")
+      span(class="fa fa-question-circle" aria-hidden="true")
