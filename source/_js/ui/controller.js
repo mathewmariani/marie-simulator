@@ -3,14 +3,10 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
   // machine
   $scope.memory = memory;
   $scope.cpu = cpu;
+  $scope.assembly = [];
 
   // status
   $scope.status_message = "Ready to load program instructions.";
-
-  // assembly variables
-  $scope.assembly = [];
-  $scope.assembly_successful = false;
-  $scope.assembly_errors = false;
 
   // memory variables
   $scope.programLoaded = false;
@@ -26,34 +22,30 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
   $scope.reset = function() {
     $scope.memory.reset();
     $scope.cpu.reset();
+    $scope.assembly = [];
 
+    // machine
     $scope.programLoaded = false;
     $scope.currentAddress = undefined;
     $scope.halted = false;
-    $scope.assembly = [];
-    $scope.assembly_errors = [];
-
     $scope.status_message = "Ready to load program instructions.";
   };
 
+  // FIXME: this needs to be re-programmed
   // assemble the program, and load the instructions into memory
   $scope.assemble = function() {
     try {
       $scope.reset();
+      $scope.assembly = assembler.assemble($scope.code);
 
-      var assembly = assembler.assemble($scope.code);
-
-      $scope.assembly_successful = !assembly.failed;
-      if (assembly.failed) {
-        $scope.assembly_errors = assembly.errors;
+      // if we have some errors don't continue assembling
+      if ($scope.assembly.errors.length > 0) {
         return;
       }
 
-      $scope.assembly = assembly.assembled;
-
       // place all instructions into memory
-      for (var i = 0, l = assembly.instructions.length; i < l; i++) {
-        memory.data[i] = assembly.instructions[i];
+      for (var i = 0, l = $scope.assembly.hexcodes.length; i < l; i++) {
+        memory.data[i] = $scope.assembly.hexcodes[i];
       }
 
       // we've reassembled, so reset some values/
@@ -62,9 +54,7 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
 
     } catch (e) {
       // assembly halted
-      $scope.assembly_errors = assembly.errors;
-      $scope.assembly_successful = false;
-      $scope.programLoaded = false;
+      console.error (e);
     }
   };
 

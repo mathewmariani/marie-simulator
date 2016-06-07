@@ -21,74 +21,50 @@ app.service('assembler', ['opcodes', function(opcodes) {
       var COMMENT_DELIMITER = '/';
 
       var errorMessages = [
-          "ORiGination directive must be first noncomment line of program.",
-          "A label cannot have 0..9 as its beginning character.",
-          "Statement label must be unique.",
-          "Instruction not recognized.",
-          "Missing instruction.",
-          "Missing operand.",
-          "Hex address literal out of range 0 to 0FFF allowable.",
-          "Invalid decimal value: -32768 to 32767 allowable.",
-          "Invalid octal value: 0 to 177777 allowable.",
-          "Invalid hexadecimal value: 0 to FFFF allowable.",
-          "Operand undefined.",
-          "Maximum source lines exceeded. Assembly halted.",
-          "Maximum line number exceeded. Assembly halted."
+        "ORiGination directive must be first noncomment line of program.",  // 0
+        "A label cannot have 0..9 as its beginning character.",             // 1
+        "Statement label must be unique.",                                  // 2
+        "Instruction not recognized.",                                      // 3
+        "Missing instruction.",                                             // 4
+        "Missing operand.",                                                 // 5
+        "Hex address literal out of range 0 to 0FFF allowable.",            // 6
+        "Invalid decimal value: -32768 to 32767 allowable.",                // 7
+        "Invalid octal value: 0 to 177777 allowable.",                      // 8
+        "Invalid hexadecimal value: 0 to FFFF allowable.",                  // 9
+        "Operand undefined.",                                               // 10
+        "Maximum source lines exceeded. Assembly halted.",                  // 11
+        "Maximum line number exceeded. Assembly halted."                    // 12
       ];
 
-      var CODE = [];
-      var LABELS = [];
+      // returned values
+      var source = input;       // untouched source
+      var instructions = [];    // seperated instructions
+      var hexcodes = [];        // hexcodes
+      var errors = [];          // errors
 
-      var ASSEMBLED = [];
-      var INSTRUCTIONS = [];
-      var ERROR_LIST = [];
-      var FAULTY = false;
-
-      var currentLine = 0;
-      var endFlag = false;
+      // this is the current line the assembler is using
       var currentAssembledLine = undefined;
+      var labels = [];
+
+      var endFlag = false;
 
       var setError = function(id) {
-        FAULTY = true;
-        ERROR_LIST.push({
+        errors.push({
           msg: errorMessages[id],
-          line: currentLine
+          line: currentAssembledLine["address"]
         });
       };
 
       var addLabel = function(symbol) {
         if (!isNaN(symbol.charAt(0))) {
-           setError(1);
+          setError(1);
         }
 
-        if (symbol in LABELS) {
+        if (symbol in labels) {
           setError(2);
         } else {
-          LABELS[symbol] = ASSEMBLED.length;
+          labels[symbol] = instructions.length;
         }
-      };
-
-      var getOpcode = function(instruction) {
-        var ref, value;
-        if (instruction in opcodes) {
-          ref = opcodes[instruction];
-          if (ref == opcodes.ORG && currentLine > 0) {
-            setError(0);
-          }
-
-          if (ref == opcodes.END) {
-            endFlag = true;
-          }
-
-          if (ref < 0) {
-            ref = 0;
-          }
-
-        } else {
-          setError(3);
-        }
-
-        return ref;
       };
 
       var isValidValue = function(value) {
@@ -134,10 +110,93 @@ app.service('assembler', ['opcodes', function(opcodes) {
         return parseInt(result);
       };
 
-      // reads labels that can be legal hex values
-      var getOperand = function(opcode, operand) {
-        opcode = opcodes[opcode];
+      var parseLine = function(str) {
+        var assembledLine = {};
+
+        // find the commment and remove it
+        var n = str.indexOf(COMMENT_DELIMITER);
+        if (n >= 0) {
+          str = str.substring(0, n);
+        }
+
+        str = str.trim();
+        if (!str || 0 === str.length) {
+          return;
+        }
+
+        // [1]LABEL, [2]OPCODE [3]OPERAND
+        var interpreter = regexInterpreter.exec(str);
+
+        var currentLine = {};
+        currentLine["address"] = instructions.length;
+        currentLine["label"] = interpreter[GROUP_LABEL];
+        currentLine["opcode"] = interpreter[GROUP_OPCODE];
+        currentLine["operand"] = interpreter[GROUP_OPERAND];
+        currentLine["hexcode"] = 0;
+
+
+        if (interpreter[GROUP_LABEL]) {
+          addLabel(interpreter[GROUP_LABEL]);
+        }
+
+        instructions.push(currentLine);
+        if (instructions.length > MAX_ADDRESS) {
+          throw errorMessages[12];
+        }
+      };
+
+      // split the lines
+      lines = input.split('\n');
+
+      // first pass O(n)
+      for(var i = 0; i < lines.length; ++i) {
+        parseLine(lines[i]);
+
+        // end opcode was found
+        if (endFlag) {
+          break;
+        }
+      }
+
+      var getLabelAddress = function(symbol) {
         var result = undefined;
+        if (symbol in labels) {
+          result = labels[symbol];
+        } else {
+          setError(10);
+        }
+
+        return result;
+      };
+
+      var getOpcode = function() {
+        var ref, value, instruction;
+        instruction = currentAssembledLine["opcode"];
+        if (instruction in opcodes) {
+          ref = opcodes[instruction];
+          if (ref == opcodes.ORG && currentAssembledLine["address"] > 0) {
+            setError(0);
+          }
+
+          if (ref == opcodes.END) {
+            endFlag = true;
+          }
+
+          if (ref < 0) {
+            ref = 0;
+          }
+        } else {
+          setError(3);
+        }
+
+        return ref;
+      };
+
+      var getOperand = function() {
+        var opcode, operand, result;
+        opcode = opcodes[currentAssembledLine["opcode"]];
+        operand = currentAssembledLine["operand"];
+        result = undefined;
 
         switch(opcode) {
           // needs operand, could be label though so watch out
@@ -162,7 +221,7 @@ app.service('assembler', ['opcodes', function(opcodes) {
                 }
               } else {
                 // assume its a label
-                result = operand;
+                result = getLabelAddress(operand);
               }
             } else {
               setError(10);
@@ -187,108 +246,36 @@ app.service('assembler', ['opcodes', function(opcodes) {
           case opcodes.OUTPUT:
           case opcodes.HALT:
           case opcodes.CLEAR:
-            result = undefined;
+            result = 0;
             break;
         }
 
         return result;
       };
 
-      var parseLine = function(str) {
-        var assembledLine = {};
+      // second pass
+      for (var i = 0; i < instructions.length; ++i) {
+        currentAssembledLine = instructions[i];
 
-        // find commment, and remove it
-        var n = str.indexOf(COMMENT_DELIMITER);
-        if (n >= 0) {
-          str = str.substring(0, n);
-        }
+        var opcode, operand, hexcode;
+        opcode = getOpcode();
+        operand = getOperand();
 
-        str = str.trim();
-        if (!str || 0 === str.length) {
-          return;
-        }
-
-        // NOTE: in a later version I would like to
-        // be able to store the currentAssembledLine
-        // and have the functions edit the hexcode as they see fit
-        // all the extra information would be used for saving.
-
-        // [1]LABEL, [2]OPCODE [3]OPERAND
-        var interpreter = regexInterpreter.exec(str);
-        assembledLine["line"] = currentLine;
-        assembledLine["address"] = ASSEMBLED.length;
-        assembledLine["label"] = interpreter[GROUP_LABEL];
-        assembledLine["opcode"] = getOpcode(interpreter[GROUP_OPCODE].toUpperCase());
-
-        // FIXME: this is just a hack for the meantime
-        assembledLine["op"] = interpreter[GROUP_OPCODE].toUpperCase();
-
-        assembledLine["operand"] = getOperand(interpreter[GROUP_OPCODE], interpreter[GROUP_OPERAND]);
-        assembledLine["hexcode"] = undefined;
-
-        // add label
-        if (interpreter[GROUP_LABEL]) {
-          addLabel(assembledLine.label);
-        }
-
-        ASSEMBLED.push(assembledLine);
-        if (ASSEMBLED.length > MAX_ADDRESS) {
-          throw errorMessages[12];
-        }
-      };
-
-      // split the lines
-      lines = input.split('\n');
-
-      // first pass O(n)
-      for(var i = 0; i < lines.length; ++i) {
-        currentLine = i;
-        parseLine(lines[i]);
-
-        // end opcode was found
-        if (endFlag) {
-          break;
-        }
-      }
-
-      var getLabelAddress = function(symbol) {
-        var result = undefined;
-        if (symbol in LABELS) {
-          result = LABELS[symbol];
-        } else {
-          setError(10);
-        }
-
-        return result;
-      };
-
-      // second pass O(n)
-      for (var i = 0; i < ASSEMBLED.length; ++i) {
-        currentLine = i;
-        var opcode = ASSEMBLED[currentLine].opcode;
-        var operand = ASSEMBLED[currentLine].operand;
-
-        if (typeof operand === "string") {
-          operand = getLabelAddress(operand);
-        }
-
-        // for some reason the hexcodes dont work as intented
-        var hexcode = undefined;
+        // calculate hex code
+        hexcode = 0;
         hexcode |= opcode;
         hexcode <<= 12;
         hexcode |= operand;
 
-        ASSEMBLED[i].hexcode = hexcode;
-        INSTRUCTIONS.push(hexcode);
+        instructions[i].hexcode = hexcode;
+        hexcodes.push(hexcode);
       }
 
-      console.log (ASSEMBLED);
-
       return {
-        assembled: ASSEMBLED,
-        instructions: INSTRUCTIONS,
-        errors: ERROR_LIST,
-        failed: FAULTY
+        source: source,
+        instructions: instructions,
+        hexcodes: hexcodes,
+        errors: errors
       };
     }
   };
