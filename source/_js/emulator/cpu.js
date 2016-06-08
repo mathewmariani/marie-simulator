@@ -14,14 +14,23 @@ app.service('cpu', ['opcodes', 'memory', 'register_int8', 'register_int12', 'reg
       // all outputs
       self.outputs = [];
 
+      self.interrupt = false;
       self.fault = false;
       self.halt = false;
+    },
+
+    settle: function(value) {
+      var self = this;
+
+      self.InREG.write(value);
+      self.AC.write(self.InREG.read());
+      self.interrupt = false;
     },
 
     step: function() {
       var self = this;
       if (self.fault === true) {
-        throw "FAULT. Reassembled to continue.";
+        throw "FAULT. Reassemble to continue.";
       }
 
       try {
@@ -82,8 +91,8 @@ app.service('cpu', ['opcodes', 'memory', 'register_int8', 'register_int12', 'reg
           self.AC.write(self.AC.read() - self.MBR.read());
           break;
         case opcodes.INPUT:
-          throw "INPUT NOT CURRENTLY SUPPORTED";
-          //self.AC.write(self.InREG);
+          self.interrupt = true;
+          throw "Machine interrupted. Waiting for input.";
           break;
         case opcodes.OUTPUT:
           self.OutREG.write(self.AC.read());
@@ -186,7 +195,6 @@ app.service('cpu', ['opcodes', 'memory', 'register_int8', 'register_int12', 'reg
         }
         return true;
       } catch (e) {
-        self.fault = true;
         throw e;
       }
     }

@@ -8,9 +8,9 @@
 - The maximum amount of assembled lines of code is 2^14 due to operand size.
 
 ### Two's complement
-A signed number representation using using 3 bits. <br />
-Signed numbers will have a range of [-(2^2), (2^2-1)]. <br />
-Unsigned numbers will have a range of [0, (2^3)]. <br />
+- A signed number representation using using 3 bits.
+- Signed numbers will have a range of [-(2^2), (2^2-1)].
+- Unsigned numbers will have a range of [0, (2^3)].
 
 | Signed | Unsigned | Binary |
 | ------ | -------- | ------ |
@@ -24,14 +24,15 @@ Unsigned numbers will have a range of [0, (2^3)]. <br />
 | -1 | 7 | 111 |
 
 ### Instruction format
-Instructions are 16 bits; 4 bits for the opcode. 12 bits for the address.
+Instructions are 16 bits; 4 bits for the opcode, 12 bits for the address.
 
 ```
 [0000] [0000 0000 000]
 [opcode] [address]
 ```
 
-## Registers
+## Machine
+### Registers
 * **AC**, Accumulator, a 16-bit register which holds the results of an arithmetical or logical operation.
 * **IR**, a 16-bit register which holds an instruction immediately preceding its execution.
 * **MBR**, a 16-bit register that holds the data after its retrieval from, or before its placement into memory.
@@ -40,7 +41,7 @@ Instructions are 16 bits; 4 bits for the opcode. 12 bits for the address.
 * **InREG**, an 8-bit register that holds data read from an input device.
 * **OutREG**, an 8-bit register that holds data that is ready for the output device
 
-## Instruction Types
+### Instruction Types
 | Type | Instruction | Description |
 | ---- | ----------- | ----------- |
 | Arithmetic | ADD X | Add value at address X to the accumulator. |
@@ -55,8 +56,8 @@ Instructions are 16 bits; 4 bits for the opcode. 12 bits for the address.
 | | JUMPI X | (Indirect) Use the value at X as the address to jump to. |
 | Transfer | SKIPCOND X | Skip next instruction based on condition X. |
 | | JUMP X | Transfers the program control directly to address X. |
-| Directives | HALT | Halt machine. |
-| | END | Halt assembler, no instructions following will be interpreted. |
+| Interrupt | HALT | Halt machine. |
+| Directives | END | Halt assembler, no instructions following will be interpreted. |
 | | ORG | Must be the first non-comment line of program, or omitted. |
 | I/O | INPUT | Loads data from input device to the accumulator. |
 | | OUTPUT | Loads the value from the accumulator into output register to be displayed. |
@@ -80,12 +81,18 @@ significant bits
 0000 [10]00 0000 0000 (0x800)
 ```
 
-## Datatypes
+### Datatypes
 | Type | Instruction | Range |
 | ---- | ----------- | ----------- |
 | Decimal | DEC | [-32768, 32767] |
 | Hexadecimal | HEX | [0, 0xFFFF] |
 | Octal | OCT | [0, 177777] |
+
+### I/O
+Within the MARIE Machine Simulator the input and output devices are both considered to be external devices. If the device was internal a portion of memory would need to be partitioned for the device to read from.
+
+### Filters
+Filters will do their best to convert the input into the desired format; otherwise a value of zero will be assumed. The ASCII filter will only read the value of the first char of an input.
 
 ## Interpreter
 #### JNS <small>(0000)</small>

@@ -1,3 +1,19 @@
-div(class="input-group form-group")
-  span(class="input-group-addon" id="basic-addon3") Input
-  input(type="text" class="form-control disabled" ng-model="inputModel")
+div(id="tour_MachineInput" class="form-group input-group")
+  div(class="input-group-btn")
+    
+    //- Input button
+    button(class="btn btn-default" type='button' ng-click="settle()") Input
+    
+    // Input Filter
+    button(class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+      span(class="caret")
+    ul(class="dropdown-menu")
+      li(class="dropdown-header") Input Filter
+      li
+        a(ng-click="setInputFilter('decimal')") Decimal
+      li
+        a(ng-click="setInputFilter('hexadecimal')") Hexadecimal
+      li
+        a(ng-click="setInputFilter('ascii')") ASCII
+        
+  input(class="form-control" type='text' ng-model="inputValue" placeholder='Value')

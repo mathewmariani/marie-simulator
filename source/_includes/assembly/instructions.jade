@@ -9,8 +9,8 @@ div(class="panel panel-default")
         th Hexcode
     tbody
       tr(ng-repeat="item in assembly.instructions" ng-class="{'info':$index == currentAddress}")
-        td {{ item.address | output:16 | fixedLength:4 | uppercase }}
+        td {{ item.address | memoryfilter }}
         td {{ item.label }}
         td {{ item.opcode }}
         td {{ item.operand }}
-        td {{ item.hexcode | output:16 | fixedLength:4 | uppercase }}
+        td {{ item.hexcode | memoryfilter }}

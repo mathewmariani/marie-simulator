@@ -5,6 +5,8 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
   $scope.cpu = cpu;
   $scope.assembly = [];
 
+  $scope.inputValue = undefined;
+
   // status
   $scope.status_message = "Ready to load program instructions.";
 
@@ -14,6 +16,11 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
 
   // cpu variables
   $scope.halted = false;
+  $scope.speed = 4;
+
+  // filters (decimal, hexadecimal, ascii)
+  $scope.selectedInputFilter = "decimal";
+  $scope.selectedOutputFilter = "decimal";
 
   // current 'sample' program
   $scope.code = "ORG\nLOAD X\nADD Y\nOUTPUT\nHALT\nX, DEC 0\nY, DEC 1";
@@ -31,8 +38,6 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
     $scope.status_message = "Ready to load program instructions.";
   };
 
-  // FIXME: this needs to be re-programmed
-  // assemble the program, and load the instructions into memory
   $scope.assemble = function() {
     try {
       $scope.reset();
@@ -68,7 +73,7 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
   // execute a single instruction
   $scope.executeStep = function() {
     try {
-      if (cpu.halt) {
+      if (cpu.halt || cpu.interrupt) {
         return false;
       }
 
@@ -92,11 +97,41 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', '$log', 'cpu', 'memor
       if ($scope.executeStep()) {
         $scope.run();
       }
-    }, 1000 / 4);
+    }, 1000 / $scope.speed);
   };
 
   $scope.halt = function() {
     $timeout.cancel(tick);
     $scope.reset();
+  }
+
+  $scope.settle = function() {
+    if (cpu.interrupt){
+      var value = 0;
+      switch ($scope.selectedInputFilter) {
+      case "decimal":
+      case "hexadecimal":
+        value = parseInt($scope.inputValue, 10);
+      break;
+      case "ascii":
+        value = $scope.inputValue.charCodeAt();
+      break;
+      }
+      $scope.cpu.settle(value);
+      $scope.run();
+    }
+  };
+
+  // Options
+  $scope.setSpeed = function(value) {
+    $scope.speed = value;
+  };
+
+  $scope.setInputFilter = function(filter) {
+    $scope.selectedInputFilter = filter;
+  };
+
+  $scope.setOutputFilter = function(filter) {
+    $scope.selectedOutputFilter = filter;
   };
 }]);

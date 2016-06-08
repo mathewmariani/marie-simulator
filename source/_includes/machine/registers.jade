@@ -9,8 +9,8 @@ div(class="panel panel-default")
         th PC
     tbody
       tr
-        td {{ cpu.AC.read() | output:16 | fixedLength:4 | uppercase }}
-        td {{ cpu.IR.read() | output:16 | fixedLength:4 | uppercase }}
-        td {{ cpu.MAR.read() | output:16 | fixedLength:4 | uppercase }}
-        td {{ cpu.MBR.read() | output:16 | fixedLength:4 | uppercase }}
-        td {{ cpu.PC.read() | output:16 | fixedLength:4 | uppercase }}
+        td {{ cpu.AC.read() | memoryfilter }}
+        td {{ cpu.IR.read() | memoryfilter }}
+        td {{ cpu.MAR.read() | memoryfilter }}
+        td {{ cpu.MBR.read() | memoryfilter }}
+        td {{ cpu.PC.read() | memoryfilter }}

@@ -1,6 +1,6 @@
 {
   "name": "marie-simulator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An assembly languague simulator written in JavaScript with AngularJS",
   "dependencies": {
     "gulp": "^3.9.1",

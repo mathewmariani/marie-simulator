@@ -25,7 +25,7 @@ var general_tour = new Tour({
   },{
     placement: "auto bottom",
     element: "#tour_Machine",
-    content: "The machine panel has controls for running, stepping forward, and halting an executed process, as well as and output well."
+    content: "The machine panel has controls for running, stepping forward, and halting an executed process. as well as I/O devices."
   }]
 });
 
@@ -45,8 +45,12 @@ var machine_tour = new Tour({
     content: "This table displays the value inside the machines registers during runtime. More information can be found in the student resources."
   },{
     placement: "auto right",
+    element: "#tour_MachineInput",
+    content: "Here is the Input Device which will be read by the cpu during and interrupt. To settle the interrupt press the input button. By default a decimal value is assumed but can be changed in the dropdown by pressing the carret."
+  },{
+    placement: "auto right",
     element: "#tour_MachineOutput",
-    content: "This well displays the value inside the output registers during runtime."
+    content: "This panel displays the value inside the output registers during runtime. The filter can be changed in the options menu in the header."
   },{
     placement: "auto right",
     element: "#tour_MachineMessages",

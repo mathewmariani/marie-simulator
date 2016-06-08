@@ -1,14 +1,19 @@
-//- CPU settings
+//- File settings
 li(class="dropdown")
   a(class="dropdown-toggle" href='#' data-toggle='dropdown' role='button', aria-haspopup='true' aria-expanded='false')
-    | CPU Speed
+    | File
     span.caret
   ul(class="dropdown-menu")
     li
-      a(ng-click="selectSpeed(1)") 1 Hert
+      a() New File
     li
-      a(ng-click="selectSpeed(4)") 4 Hertz
+      a() Open...
     li
-      a(ng-click="selectSpeed(8)") 8 Hertz
+      a() Reopen Last Item
+    
+    li(role="separator" class="divider")
+    
+    li  
+      a() Save
     li
-      a(ng-click="selectSpeed(16)") 16 Hertz
+      a() Save As...

@@ -1,10 +1,9 @@
-//- Ouput Filter
+//- CPU settings
 li(class="dropdown")
   a(class="dropdown-toggle" href='#' data-toggle='dropdown' role='button', aria-haspopup='true' aria-expanded='false')
-    | Output Filter
+    | Options
     span.caret
   ul(class="dropdown-menu")
-    li
-      a(ng-click="selectOutputFilter(16)") Hexadecimal
-    li
-      a(ng-click="selectOutputFilter(10)") Decimal
+    include ./options/cpu_speed.jade
+    li(role="separator" class="divider")
+    include ./options/output_filter.jade
