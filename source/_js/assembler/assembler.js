@@ -215,7 +215,7 @@ app.service('assembler', ['opcodes', function(opcodes) {
               var value = parseInt(operand);
               if (!isNaN(value)) {
                 if (isValidValue(value)) {
-                  result = value;
+                  result = parseInt(operand, 16);;
                 } else {
                   setError(9);
                 }
