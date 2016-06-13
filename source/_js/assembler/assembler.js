@@ -130,7 +130,7 @@ app.service('assembler', ['opcodes', function(opcodes) {
         var currentLine = {};
         currentLine["address"] = instructions.length;
         currentLine["label"] = interpreter[GROUP_LABEL];
-        currentLine["opcode"] = interpreter[GROUP_OPCODE];
+        currentLine["opcode"] = interpreter[GROUP_OPCODE].toUpperCase();
         currentLine["operand"] = interpreter[GROUP_OPERAND];
         currentLine["hexcode"] = 0;
 
