@@ -1,7 +1,5 @@
-# MARIE Simulator [![Build Status](https://travis-ci.org/mathewmariani/marie-simulator.svg?branch=master)](https://travis-ci.org/mathewmariani/marie-simulator)
+# MARIE Simulator [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com) [![Build Status](https://travis-ci.org/mathewmariani/marie-simulator.svg?branch=master)](https://travis-ci.org/mathewmariani/marie-simulator)
 An assembly language simulator written in Javascript with AngularJS
-
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 
 Follow development on the [Trello Board](https://trello.com/b/JW47LSjx/marie-simulator)
 
