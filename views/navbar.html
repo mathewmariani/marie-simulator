@@ -1,0 +1,43 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid clearfix">
+    <div class="navbar-header">
+			<a class="navbar-brand">MARIE Simulator</a>
+		</div>
+
+    <ul class="nav navbar-nav navbar-collapse">
+    	<!-- resources -->
+			<li><a target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/cheatsheet.md">Cheatsheet</a></li>
+			<li><a target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/student_resource.md">Resources</a></li>
+			<li><a target="_blank" href="https://gist.github.com/mathewmariani/91f471422c4ac0b5ee37">Examples        </a></li>
+			<li><a href="https://github.com/mathewmariani/marie-simulator">Github</a></li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right navbar-collapse">
+    	<!-- options -->
+			<li class="dropdown">
+				<a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle">
+					Options
+					<span class="caret"></span>
+				</a>
+			  <ul class="dropdown-menu">
+					
+					<!-- cpu settings -->
+					<li class="dropdown-header">CPU Speed</li>
+					<li><a ng-click="setSpeed(1)">1 Hert</a></li>
+					<li><a ng-click="setSpeed(4)">4 Hertz</a></li>
+					<li><a ng-click="setSpeed(8)">8 Hertz</a></li>
+					<li><a ng-click="setSpeed(16)">16 Hertz</a></li>
+
+			    <li role="separator" class="divider"></li>
+
+					<!-- filter settings -->
+					<li class="dropdown-header">Output Filter</li>
+					<li><a ng-click="setOutputFilter('decimal')">Decimal</a></li>
+					<li><a ng-click="setOutputFilter('hexadecimal')">Hexadecimal</a></li>
+					<li><a ng-click="setOutputFilter('ascii')">ASCII</a></li>
+			  </ul>
+			</li>
+    </ul>
+
+  </div>
+</nav>

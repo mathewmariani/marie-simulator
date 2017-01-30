@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MarieSimulator">
+<head>
+	<!-- metadata -->
+	<title>Marie Simulator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+	<!-- fontawesome -->
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<!-- angularjs -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+
+	<!-- jQuery-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+	<!-- angularjs bootstrap-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+
+	<!-- bootstrap-->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<!-- code mirror-->
+	<link rel="stylesheet" href="assets/codemirror/codemirror.css"/>
+	<script src="assets/codemirror/ui-codemirror.min.js"></script>
+	<script src="assets/codemirror/codemirror.js"></script>
+	<script src="assets/codemirror/active-line.js"></script>
+	<script src="assets/codemirror/goto-line.js"></script>
+
+	<!-- main application -->
+	<script src="src/app.js"></script>
+
+	<!-- application directives -->
+	<script src="src/directives/assembly.js"></script>
+	<script src="src/directives/editor.js"></script>
+	<script src="src/directives/machine.js"></script>
+	<script src="src/directives/memory.js"></script>
+	<script src="src/directives/navbar.js"></script>
+
+	<!-- emulator -->
+	<script src="src/services/emulator/assembler.js"></script>
+	<script src="src/services/emulator/cpu.js"></script>
+	<script src="src/services/emulator/memory.js"></script>
+	<script src="src/services/emulator/opcodes.js"></script>
+	<script src="src/services/emulator/register8.js"></script>
+	<script src="src/services/emulator/register12.js"></script>
+	<script src="src/services/emulator/register16.js"></script>
+
+	<!-- application services -->
+	<script src="src/services/filesystem.js"></script>
+	<script src="src/services/machine.js"></script>
+
+	<!-- application filters -->
+	<script src="src/filters/base.filter.js"></script>
+	<script src="src/filters/fixedlength.filter.js"></script>
+	<script src="src/filters/memory.filter.js"></script>
+	<script src="src/filters/output.filter.js"></script>
+	<script src="src/filters/uppercase.filter.js"></script>
+
+	<!-- application controller (always last) -->
+	<script src="src/controller.js"></script>
+
+	<!-- analytics-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-58519049-2', 'auto');
+	  ga('send', 'pageview');
+	</script>
+
+</head>
+<body ng-controller="MarieCtrl">
+	<navbar></navbar>
+	<div class="container">
+		<div class="row">
+		  <div class="col-md-5">
+		  	<machine></machine>
+				<assembly></assembly>
+		  </div>
+		  <div class="col-md-7">
+		  	<editor></editor>
+				<memory></memory>
+		  </div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,8 +1,0 @@
-//- div(id="tour_MachineOutput" class="well well-sm") {{ cpu.outputs | outputfilter:"ascii" }}
-//- div(class="panel panel-default")
-//-   ng-repeat="output in cpu.outputs")
-//-   span {{ output }}
-div(id="tour_MachineOutput" class="panel panel-default" style="max-height:50px;overflow:scroll;white-space:nowrap;")
-  div(class="panel-body")
-    div(ng-repeat="value in cpu.outputs track by $index" class="pull-left" style="margin-right:5px;display:inline-block;text-align:center;")
-      span(class="label label-default") {{ value | outputfilter:selectedOutputFilter }}

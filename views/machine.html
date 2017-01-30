@@ -1,0 +1,75 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <p class="lead">
+      Machine Information
+
+      <!-- Controls -->
+      <a role="button" ng-click="halt()" class="close pull-right">
+      	<span aria-hidden="true" class="fa fa-stop"></span>
+      </a>
+      <a role="button" ng-click="run()" class="close pull-right">
+      	<span aria-hidden="true" style="padding-right: 5px;" class="fa fa-play"></span>
+      </a>
+      <a role="button" ng-click="stepForward()" class="close pull-right">
+      	<span aria-hidden="true" style="padding-right: 5px;" class="fa fa-step-forward"></span>
+      </a>
+    </p>
+
+    <!-- Input -->
+    <div class="form-group input-group">
+      <div class="input-group-btn">
+        <button type="button" ng-click="settle()" class="btn btn-default">Input</button>
+        <!-- Input Filter-->
+        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li class="dropdown-header">Input Filter</li>
+          <li><a ng-click="setInputFilter('decimal')">Decimal</a></li>
+          <li><a ng-click="setInputFilter('hexadecimal')">Hexadecimal</a></li>
+          <li><a ng-click="setInputFilter('ascii')">ASCII</a></li>
+        </ul>
+      </div>
+      <input type="text" ng-model="inputValue" placeholder="Value" class="form-control"/>
+    </div>
+
+    <!-- Messages -->
+    <div class="well well-sm">
+    	{{ statusMessage }}
+    </div>
+
+    <!-- Output -->
+    <div style="max-height:50px;overflow:scroll;white-space:nowrap;" class="panel panel-default">
+      <div class="panel-body">
+        <div ng-repeat="value in cpu.outputs track by $index" style="margin-right:5px;display:inline-block;text-align:center;" class="pull-left">
+    			<span class="label label-default">
+    				{{ value | outputfilter:selectedOutputFilter }}
+    			</span>
+    		</div>
+      </div>
+    </div>
+
+    <!-- Registers -->
+    <div class="panel panel-default">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>AC</th>
+            <th>IR</th>
+            <th>MAR</th>
+            <th>MBR</th>
+            <th>PC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ cpu.AC.read() | memoryfilter }}</td>
+            <td>{{ cpu.IR.read() | memoryfilter }}</td>
+            <td>{{ cpu.MAR.read() | memoryfilter }}</td>
+            <td>{{ cpu.MBR.read() | memoryfilter }}</td>
+            <td>{{ cpu.PC.read() | memoryfilter }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

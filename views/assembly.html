@@ -1,0 +1,45 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <p class="lead">
+      Assembly Information
+
+      <!-- controls -->
+      <a role="button" ng-click="assemble()" aria-hidden="true" class="close pull-right">
+        <span aria-hidden="true" class="fa fa-refresh"></span>
+      </a>
+    </p>
+
+    <!-- errors -->
+    <div class="list-group">
+      <button type="button" ng-repeat="error in assembly.errors" class="list-group-item">
+        {{ error.msg }}
+        <span class="badge pull-right">{{ error.line }}</span>
+      </button>
+    </div>
+
+    <!-- instructions -->
+    <div class="panel panel-default">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Address</th>
+            <th>Label</th>
+            <th>Opcode</th>
+            <th>Operand</th>
+            <th>Hexcode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in assembly.instructions" ng-class="{'info':$index == currentAddress}">
+            <td>{{ item.address | memoryfilter }}</td>
+            <td>{{ item.label }}</td>
+            <td>{{ item.opcode }}</td>
+            <td>{{ item.operand }}</td>
+            <td>{{ item.hexcode | memoryfilter }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
