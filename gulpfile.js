@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var minify = require('gulp-minify');
 var uglify = require('gulp-uglify');
 var browserSync = require('browser-sync').create();
 
