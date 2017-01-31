@@ -1,6 +1,6 @@
 {
   "name": "marie-simulator",
-  "version": "1.0.4",
+  "version": "1.0.4.1",
   "description": "An assembly languague simulator written in JavaScript with AngularJS",
   "author": "Mathew Mariani",
   "license": "MIT",

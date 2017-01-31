@@ -20,7 +20,7 @@
 					<span class="caret"></span>
 				</a>
 			  <ul class="dropdown-menu">
-					
+
 					<!-- cpu settings -->
 					<li class="dropdown-header">CPU Speed</li>
 					<li><a ng-click="setSpeed(1)">1 Hert</a></li>
@@ -37,6 +37,20 @@
 					<li><a ng-click="setOutputFilter('ascii')">ASCII</a></li>
 			  </ul>
 			</li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right navbar-collapse">
+      <!-- files -->
+      <li class="dropdown">
+        <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle">
+          Files
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a ng-click="saveAs()">Save as</a></li>
+          <!-- <li><a>Open...</a></li> -->
+        </ul>
+      </li>
     </ul>
 
   </div>

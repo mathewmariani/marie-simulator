@@ -29,6 +29,12 @@
     // current 'sample' program
     $scope.code = "ORG\nLOAD X\nADD Y\nOUTPUT\nHALT\nX, DEC 0\nY, DEC 1";
 
+    // FIXME: this is currently a patch
+    $scope.saveAs = function() {
+      var blob = new Blob([$scope.code], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, "marie-program.mas");
+    }
+
     // reset the machine
     $scope.reset = function() {
       $scope.memory.reset();
