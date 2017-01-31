@@ -19,8 +19,13 @@
     $scope.currentAddress = undefined;
 
     // cpu variables
+    $scope.accumulator = undefined;
+    $scope.instructionRegister = undefined;
+    $scope.memoryBusRegister = undefined;
     $scope.programCounter = undefined;
     $scope.memoryAddressRegister = undefined;
+    $scope.inputRegister = undefined;
+    $scope.outputRegister = undefined;
 
     // filters variables (decimal, hexadecimal, ascii)
     $scope.selectedInputFilter = "decimal";
@@ -47,9 +52,17 @@
 
       // machine
       $scope.programLoaded = false;
-      $scope.currentAddress = undefined;
       $scope.halted = false;
       $scope.status_message = "Ready to load program instructions.";
+
+      // cpu ref values
+      $scope.accumulator = undefined;
+      $scope.instructionRegister = undefined;
+      $scope.memoryBusRegister = undefined;
+      $scope.programCounter = undefined;
+      $scope.memoryAddressRegister = undefined;
+      $scope.inputRegister = undefined;
+      $scope.outputRegister = undefined;
     };
 
     $scope.assemble = function() {
@@ -80,7 +93,7 @@
 
     $scope.stepForward = function() {
       if ($scope.programLoaded && $scope.executeStep()) {
-        $scope.status_message = "Press [Step Forward] to continue.";
+        $scope.statusMessage = "Press [Step Forward] to continue.";
       }
     };
 
@@ -91,15 +104,17 @@
           return false;
         }
 
-        // highlight current memory
-        $scope.currentAddress = cpu.PC.read();
-
+        $scope.accumulator = cpu.AC.read();
+        $scope.instructionRegister = cpu.IR.read();
+        $scope.memoryBusRegister = cpu.MBR.read();
         $scope.programCounter = cpu.PC.read();
         $scope.memoryAddressRegister = cpu.MAR.read();
+        $scope.inputRegister = cpu.InREG.read();
+        $scope.outputRegister = cpu.OutREG.read();
 
         return cpu.step();
       } catch (e) {
-        $scope.status_message = e;
+        $scope.statusMessage = e;
         return false;
       }
     };
@@ -127,12 +142,14 @@
         var value = 0;
         switch ($scope.selectedInputFilter) {
         case "decimal":
-        case "hexadecimal":
           value = parseInt($scope.inputValue, 10);
-        break;
+          break;
+        case "hexadecimal":
+          value = parseInt($scope.inputValue, 16);
+          break;
         case "ascii":
           value = $scope.inputValue.charCodeAt();
-        break;
+          break;
         }
         $scope.cpu.settle(value);
         $scope.run();
@@ -153,56 +170,3 @@
     };
   }]);
 } (window.angular));
-
-// FIXME: this way might be easier
-// (function (angular) {
-//   'use strict';
-//
-//   function MarieCtrl(
-//     FileSystemService,
-//     MachineService,
-//     $scope) {
-//
-//     MachineService.init();
-//
-//     // function variables
-//     $scope.assemble = MachineService.assemble;
-//     $scope.halt = MachineService.halt;
-//     $scope.run = MachineService.run;
-//     $scope.stepForward = MachineService.stepForward;
-//     $scope.settle = MachineService.settle;
-//
-//     // machine variables
-//     $scope.assembly = MachineService.assembly;
-//     $scope.cpu = MachineService.cpu;
-//     $scope.memory = MachineService.memory;
-//
-//     // input variables
-//     $scope.inputValue = $scope.inputValue;
-//
-//     // status variables
-//     $scope.statusMessage = MachineService.statusMessage;
-//
-//     // memory variables
-//     $scope.programLoaded = MachineService.programLoaded;
-//     $scope.currentAddress = MachineService.currentAddress;
-//
-//     // filters variables
-//     $scope.selectedInputFilter = MachineService.selectedInputFilter;
-//     $scope.selectedOutputFilter = MachineService.selectedOutputFilter;
-//
-//     // cpu variables
-//     $scope.halted = MachineService.halted;
-//     $scope.speed = MachineService.speed;
-//
-//     // variables
-//     $scope.code = MachineService.code;
-//
-//     console.log(MachineService.name);
-//
-//   }
-//
-//   angular.module('MarieSimulator')
-// 		.controller('MarieCtrl', MarieCtrl);
-//
-// } (window.angular));
