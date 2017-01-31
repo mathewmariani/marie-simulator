@@ -6,6 +6,7 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "*",
+    "gulp-uglify": "*",
     "browser-sync": "*"
   }
 }
