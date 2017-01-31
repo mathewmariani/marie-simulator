@@ -1,7 +1,7 @@
 <div style="max-height:300px; overflow: scroll;" class="panel panel-default">
   <div class="panel-body">
     <div ng-repeat="value in memory.data track by $index" style="width:3em;display:inline-block;text-align:center;" class="memory-block">
-      <span ng-class="{'label-info':$index == currentAddress}" class="label label-default">
+      <span ng-class="{'label-info':$index == programCounter, 'label-warning':$index == memoryAddressRegister}" class="label label-default">
         {{ value | memoryfilter}}
       </span>
     </div>

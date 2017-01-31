@@ -18,6 +18,10 @@
     $scope.programLoaded = false;
     $scope.currentAddress = undefined;
 
+    // cpu variables
+    $scope.programCounter = undefined;
+    $scope.memoryAddressRegister = undefined;
+
     // filters variables (decimal, hexadecimal, ascii)
     $scope.selectedInputFilter = "decimal";
     $scope.selectedOutputFilter = "decimal";
@@ -89,6 +93,9 @@
 
         // highlight current memory
         $scope.currentAddress = cpu.PC.read();
+
+        $scope.programCounter = cpu.PC.read();
+        $scope.memoryAddressRegister = cpu.MAR.read();
 
         return cpu.step();
       } catch (e) {
