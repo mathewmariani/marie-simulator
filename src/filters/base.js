@@ -1,0 +1,1 @@
+angular.module("MarieSimulator").filter("base",function(){return function(r,t){return r.toString(t).toUpperCase()}});

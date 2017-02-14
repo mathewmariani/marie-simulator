@@ -1,0 +1,31 @@
+<!-- header -->
+<div class="modal-header">
+	<h3 class="modal-title">CPU Interrupt</h3>
+</div>
+
+<!-- body -->
+<div class="modal-body">
+
+	<!-- registers -->
+	<registers></registers>
+
+	<!-- Input Filter-->
+	<div class="form-group input-group">
+		<div class="input-group-btn">
+			<button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li class="dropdown-header">Input Filter</li>
+				<li ng-repeat="item in $inputModal.filters track by $index">
+					<a ng-click="$inputModal.setFilter($index)">{{ item.name }}</a>
+				</li>
+			</ul>
+		</div>
+		<input type="text" ng-model="$inputModal.input" placeholder="Value" class="form-control"/>
+	</div>
+
+</div>
+
+<!-- footer -->
+<div class="modal-footer">
+	<button class="btn btn-primary" type="button" ng-click="$inputModal.settle()">Settle</button>
+</div>

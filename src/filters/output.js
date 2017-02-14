@@ -1,0 +1,1 @@
+angular.module("MarieSimulator").filter("outputfilter",function(){return function(r,t){switch(t){case"dec":return r=r>127?r-256:r,r.toString(10);case"hex":for(r=r.toString(16).toUpperCase();r.length<4;)r="0"+r;return r;case"ascii":return String.fromCharCode(r);default:return r.toString(10)}}});

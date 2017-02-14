@@ -1,0 +1,31 @@
+<!-- instructions -->
+<div class="panel panel-default" style="height:260px; max-height:260px; overflow:scroll;">
+  <table class="table">
+    <thead>
+      <tr>
+				<!--
+				TODO: add breakpoints
+				<th></th>
+				-->
+        <th>Address</th>
+        <th>Label</th>
+        <th>Opcode</th>
+        <th>Operand</th>
+        <th>Hexcode</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in assembly.program" ng-class="{'info':$index == cpu.pc}">
+				<!--
+				TODO: add breakpoints
+				<td><input type="checkbox" ng-click="setBreakpoint($index)"></td>
+				-->
+        <td>{{ item.address | address }}</td>
+        <td>{{ item.label }}</td>
+        <td>{{ item.opcode }}</td>
+        <td>{{ item.operand }}</td>
+        <td>{{ item.hexcode | hexcode }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

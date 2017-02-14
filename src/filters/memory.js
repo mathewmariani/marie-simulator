@@ -1,0 +1,1 @@
+!function(r){"use strict";r.module("MarieSimulator").filter("memory",function(){return function(r){for(r=r||0,r=r.toString(16).toUpperCase();r.length<4;)r="0"+r;return r}})}(window.angular);

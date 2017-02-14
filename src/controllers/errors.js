@@ -1,0 +1,1 @@
+!function(n){"use strict";n.module("MarieSimulator").controller("ErrorModalInstanceCtrl",["$uibModalInstance","errors",function(n,r){var o=this;o.errors=r,o.ok=function(){n.close()},o.cancel=function(){n.dismiss("cancel")}}])}(window.angular);

@@ -1,0 +1,1 @@
+!function(o){o.module("MarieSimulator",["ui.bootstrap","ui.codemirror"])}(window.angular);

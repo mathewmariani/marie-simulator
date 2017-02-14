@@ -1,0 +1,14 @@
+<!-- registers -->
+<div class="panel panel-default" style="height:260px; max-height:260px;">
+	<table class="table table-bordered table-striped">
+		<tbody>
+			<tr><th>AC</th><td>{{ cpu.ac | registers }}</td></tr>
+			<tr><th>IR</th><td>{{ cpu.ir | registers }}</td></tr>
+			<tr><th>MAR</th><td>{{ cpu.mar | registers }}</td></tr>
+			<tr><th>MBR</th><td>{{ cpu.mbr | registers }}</td></tr>
+			<tr><th>PC</th><td>{{ cpu.pc | registers }}</td></tr>
+			<tr><th>OUT</th><td>{{ cpu.outreg | registers }}</td></tr>
+			<tr><th>IN</th><td>{{ cpu.inreg | registers }}</td></tr>
+		</tbody>
+	</table>
+</div>

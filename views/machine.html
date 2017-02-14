@@ -1,0 +1,8 @@
+<!-- output -->
+<div class="panel panel-default" style="height:260px; max-height:260px; overflow:scroll;">
+	<div class="panel-body">
+		<p class="text-center" ng-repeat="value in cpu.outputs track by $index">
+				<code>{{ value | outputfilter:outputFilter }}</code>
+		</p>
+	</div>
+</div>
