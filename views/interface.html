@@ -1,0 +1,54 @@
+<!-- interface -->
+<div class="btn-toolbar" role="toolbar" aria-label="..." style="margin-bottom:20px;">
+
+	<!-- assembler -->
+  <div class="btn-group" role="group" aria-label="...">
+		<button ng-click="assemble()" ng-disabled="dissableAssembleButton()" type="button" class="btn btn-default">Assemble</button>
+		<button ng-click="reset()" ng-disabled="dissableResetButton()" type="button" class="btn btn-default">Reset</button>
+		<button ng-click="run()" ng-disabled="dissableRunButton()" type="button" class="btn btn-default">Run</button>
+		<button ng-click="halt()" ng-disabled="dissableHaltButton()" type="button" class="btn btn-default">Halt</button>
+		<button ng-click="stepForward()" ng-disabled="dissableStepButton()" type="button" class="btn btn-default">Step</button>
+  </div>
+
+	<!--
+	TODO: assembly information
+	<div class="btn-group" role="group" aria-label="...">
+		<button ng-click="function()" ng-disabled="true" type="button" class="btn btn-default">Watch List</button>
+		<button ng-click="function()" ng-disabled="true" type="button" class="btn btn-default">Assembly Dump</button>
+		<button ng-click="function()" ng-disabled="true" type="button" class="btn btn-default">RTL Dump</button>
+	</div>
+	-->
+
+	<!--
+	TODO: breakpoints
+	<div class="btn-group" role="group" aria-label="...">
+		<button ng-click="clearBreakpoints()" ng-disabled="true" type="button" class="btn btn-default">Clear Breakpoints</button>
+  </div>
+	-->
+
+	<!-- delay -->
+	<div class="btn-group">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    Delay <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu">
+			<li ng-repeat="item in delays">
+				<a ng-click="setDelay(item.value)">{{ item.name }}</a>
+			</li>
+	  </ul>
+	</div>
+
+	<!-- output -->
+	<div class="btn-group">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    Output <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu">
+			<!-- TODO: ng-repeat -->
+	    <li><a ng-click="setFilter('hex')">Hex</a></li>
+	    <li><a ng-click="setFilter('dec')">Dec</a></li>
+	    <li><a ng-click="setFilter('ascii')">ASCII</a></li>
+	  </ul>
+	</div>
+
+</div>

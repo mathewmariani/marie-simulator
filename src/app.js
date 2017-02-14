@@ -1,3 +1,3 @@
 (function (angular) {
-  angular.module('MarieSimulator', ['ui.codemirror']);
+  angular.module('MarieSimulator', ['ui.bootstrap', 'ui.codemirror']);
 } (window.angular));

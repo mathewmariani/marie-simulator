@@ -3,7 +3,11 @@ angular.module('MarieSimulator')
   return {
     assemble: function(input) {
       // [1]LABEL, [2]OPCODE [3]OPERAND /[4]COMMENT
-      var regexInterpreter = /^[\s]?(?:(\w*)[,])?[\s]*(?:(\w*))?[\s]*(?:(\w*))?/;
+      var regexInterpreter = /^[\s]?(?:(\w*)[,])?[\s]*(?:(\w*))?[\s]*(?:(-?\w*))?/;
+      var marieRegex = /^[\s]?(?:(\w*)[,])?[\s]*(?:(\w*))?[\s]*(?:(-?\w*))?/;
+      var whitespaceRegex = /^\s*(?:\/.*)?$/;
+      var labelRegex = /^\d.*$/;
+      var addressRegex = /^\d[0-9a-fA-F]*$/;
 
       var GROUP_LABEL = 1;
       var GROUP_OPCODE = 2;
@@ -18,8 +22,6 @@ angular.module('MarieSimulator')
       var HEX = -3;
       var ORG = -4;
       var END = -5;
-
-      var COMMENT_DELIMITER = '/';
 
       var errorMessages = [
         "ORiGination directive must be first noncomment line of program.",  // 0
@@ -37,246 +39,197 @@ angular.module('MarieSimulator')
         "Maximum line number exceeded. Assembly halted."                    // 12
       ];
 
-      // returned values
-      var source = input;       // untouched source
-      var instructions = [];    // seperated instructions
-      var hexcodes = [];        // hexcodes
-      var errors = [];          // errors
-
-      // this is the current line the assembler is using
-      var currentAssembledLine = undefined;
-      var labels = [];
-
-      var endFlag = false;
-
-      var setError = function(id) {
-        errors.push({
-          msg: errorMessages[id],
-          line: currentAssembledLine["address"]
-        });
-      };
-
-      var addLabel = function(symbol) {
-        if (!isNaN(symbol.charAt(0))) {
-          setError(1);
-        }
-
-        if (symbol in labels) {
-          setError(2);
-        } else {
-          labels[symbol] = instructions.length;
-        }
-      };
-
-      var isValidValue = function(value) {
-        return ((value <= MAX_INT)&&(value >= MIN_INT));
-      };
-
-      var literalToDecimal = function(type, value) {
-        var result = 0;
-        switch (type) {
-          case DEC:
-            result = parseInt(value, 10);
-            if (!isValidValue(result)) {
-              setError(7);
-              result = 0;
-            }
-            break;
-          case OCT:
-            result = parseInt(value, 8);
-            if (!isValidValue(result)) {
-              setError(8);
-              result = 0;
-            }
-            break;
-          case HEX:
-            result = parseInt(value, 16);
-            if (!isValidValue(result)) {
-              setError(9);
-              result = 0;
-            }
-            break;
-          case ORG:
-            result = parseInt(value, 16);
-            if (!isValidValue(result)) {
-              setError(6);
-              result = 0;
-            }
-            break;
-          case END:
-            result = 0;
-            break;
-        }
-
-        return parseInt(result);
-      };
-
-      var parseLine = function(str) {
-        var assembledLine = {};
-
-        // find the commment and remove it
-        var n = str.indexOf(COMMENT_DELIMITER);
-        if (n >= 0) {
-          str = str.substring(0, n);
-        }
-
-        str = str.trim();
-        if (!str || 0 === str.length) {
-          return;
-        }
-
-        // [1]LABEL, [2]OPCODE [3]OPERAND
-        var interpreter = regexInterpreter.exec(str);
-
-        var currentLine = {};
-        currentLine["address"] = instructions.length;
-        currentLine["label"] = interpreter[GROUP_LABEL];
-        currentLine["opcode"] = interpreter[GROUP_OPCODE].toUpperCase();
-        currentLine["operand"] = interpreter[GROUP_OPERAND];
-        currentLine["hexcode"] = 0;
-
-
-        if (interpreter[GROUP_LABEL]) {
-          addLabel(interpreter[GROUP_LABEL]);
-        }
-
-        instructions.push(currentLine);
-        if (instructions.length > MAX_ADDRESS) {
-          throw errorMessages[12];
-        }
-      };
-
       // split the lines
-      lines = input.split('\n');
+      var lines = input.split('\n');
+      var parsed = [];
+      var origin = 0;
+      var symbols = {};
+			var errors = [];
 
-      // first pass O(n)
-      for(var i = 0; i < lines.length; ++i) {
-        parseLine(lines[i]);
-
-        // end opcode was found
-        if (endFlag) {
-          break;
-        }
+      if (lines.length > MAX_ADDRESS) {
+				// throw errorMessages;
+				errors.push({ name: errorMessages, line: 0 });
       }
 
-      var getLabelAddress = function(symbol) {
-        var result = undefined;
-        if (symbol in labels) {
-          result = labels[symbol];
-        } else {
-          setError(10);
-        }
+      // first pass
+      for (var i = 0, l = lines.length; i < l; ++i) {
+        var line = lines[i];
 
-        return result;
-      };
+        if (/^\s*(?:\/.*)?$/.test(line))
+          continue;
 
-      var getOpcode = function() {
-        var ref, value, instruction;
-        instruction = currentAssembledLine["opcode"];
-        if (instruction in opcodes) {
-          ref = opcodes[instruction];
-          if (ref == opcodes.ORG && currentAssembledLine["address"] > 0) {
-            setError(0);
+        // [1]LABEL, [2]OPCODE [3]OPERAND
+        var interpreter = marieRegex.exec(line);
+
+        // check for other instructions
+        var label = interpreter[GROUP_LABEL];
+        var opcode = interpreter[GROUP_OPCODE].toUpperCase();
+        var operand = interpreter[GROUP_OPERAND];
+
+        // check for originator
+        if (opcode == "ORG") {
+          if (parsed.length > 0) {
+            // unexpected origination directive.
+            // throw errorMessages[0];
+						errors.push({ name: errorMessages[0], line: i });
           }
 
-          if (ref == opcodes.END) {
-            endFlag = true;
+          if (!operand) {
+						// throw errorMessages[5];
+						errors.push({ name: errorMessages[5], line: i });
           }
 
-          if (ref < 0) {
-            ref = 0;
+          origin = parseInt(operand, 16);
+          continue;
+        }
+
+        if (label) {
+          // check for a valid label
+          if (label.match(labelRegex)) {
+            // throw errorMessages[1];
+						errors.push({ name: errorMessages[1], line: i });
           }
-        } else {
-          setError(3);
+
+          // check for unique labels
+          if (label in symbols) {
+						// throw errorMessages[2];
+						errors.push({	name: errorMessages[2], line: i });
+          }
+
+          // add the symbol
+          symbols[label] = parsed.length + origin;
         }
 
-        return ref;
-      };
-
-      var getOperand = function() {
-        var opcode, operand, result;
-        opcode = opcodes[currentAssembledLine["opcode"]];
-        operand = currentAssembledLine["operand"];
-        result = undefined;
-
-        switch(opcode) {
-          // needs operand, could be label though so watch out
-          case opcodes.JNS:
-          case opcodes.LOAD:
-          case opcodes.STORE:
-          case opcodes.ADD:
-          case opcodes.SUBT:
-          case opcodes.ADDI:
-          case opcodes.JUMPI:
-          case opcodes.LOADI:
-          case opcodes.STOREI:
-          case opcodes.SKIPCOND:
-          case opcodes.JUMP:
-            if (operand !== undefined) {
-              var value = parseInt(operand);
-              if (!isNaN(value)) {
-                if (isValidValue(value)) {
-                  result = parseInt(operand, 16);;
-                } else {
-                  setError(9);
-                }
-              } else {
-                // assume its a label
-                result = getLabelAddress(operand);
-              }
-            } else {
-              setError(10);
-            }
-            break;
-
-          // special case operand
-          case opcodes.DEC:
-          case opcodes.OCT:
-          case opcodes.HEX:
-            if (operand) {
-              result = literalToDecimal(opcode, operand);
-            } else {
-              setError(10);
-            }
-            break;
-
-          // dont require operand
-          case opcodes.ORG:
-          case opcodes.END:
-          case opcodes.INPUT:
-          case opcodes.OUTPUT:
-          case opcodes.HALT:
-          case opcodes.CLEAR:
-            result = 0;
-            break;
+        // check for the end directive
+        if (opcode == "END") {
+          break;
         }
 
-        return result;
-      };
+        // otherwise just push it
+        parsed.push({
+          address: parsed.length,
+          label: label,
+          opcode: opcode,
+          operand: operand,
+          line: (i + 1)
+        });
+      }
+
+      if (parsed.length > MAX_ADDRESS) {
+				errors.push({ name: errorMessages[12], line: MAX_ADDRESS });
+      }
 
       // second pass
-      for (var i = 0; i < instructions.length; ++i) {
-        currentAssembledLine = instructions[i];
+      for (var i = 0, l = parsed.length; i < l; i++) {
+        var instruction = parsed[i];
 
-        var opcode, operand, hexcode;
-        opcode = getOpcode();
-        operand = getOperand();
+        var directiveBase = undefined;
+        switch (instruction.opcode) {
+          case "DEC":
+            directiveBase = 10;
+            break;
+          case "OCT":
+            directiveBase = 8;
+            break;
+          case "HEX":
+            directiveBase = 16;
+            break;
+        }
 
-        // calculate hex code
-        hexcode = 0;
-        hexcode |= opcode;
-        hexcode <<= 12;
-        hexcode |= operand;
+        // if this is a directive
+        if (directiveBase) {
 
-        instructions[i].hexcode = hexcode;
-        hexcodes.push(hexcode);
+          // directives need operands
+          if (!instruction.operand) {
+            // throw errorMessages[5];
+						errors.push({ name: errorMessages[5], line: instruction.line });
+          }
+
+          var literal = parseInt(instruction.operand, directiveBase);
+
+					// needs to be a valid number
+					if (isNaN(literal)) {
+						// throw (directiveBase == 10) ?
+            //   errorMessages[7] : (directiveBase == 8) ?
+            //   errorMessages[8] : errorMessages[9];
+						if (directiveBase == 10) {
+							errors.push({ name: errorMessages[7], line: instruction.line });
+						} else if (directiveBase == 8) {
+							errors.push({ name: errorMessages[8], line: instruction.line });
+						} else if (directiveBase == 16) {
+							errors.push({ name: errorMessages[9], line: instruction.line });
+						}
+					}
+
+          // check for the (min, max)
+          if (MIN_INT > literal || literal > MAX_INT) {
+            // throw (directiveBase == 10) ?
+            //   errorMessages[7] : (directiveBase == 8) ?
+            //   errorMessages[8] : errorMessages[9];
+						if (directiveBase == 10) {
+							errors.push({ name: errorMessages[7], line: instruction.line });
+						} else if (directiveBase == 8) {
+							errors.push({ name: errorMessages[8], line: instruction.line });
+						} else if (directiveBase == 16) {
+							errors.push({ name: errorMessages[9], line: instruction.line });
+						}
+          }
+
+          // create our hexcode (just a literal)
+          instruction.hexcode = literal;
+
+          // check to see if we need an operand
+          continue;
+        }
+
+        var opcode = opcodes[instruction.opcode];
+        var operand = instruction.operand;
+
+        // check for valid opcodes
+        if (!opcode) {
+          // throw errorMessages[3];
+					errors.push({	name: errorMessages[3], line: instruction.line });
+
+					// check to see if we need an operand
+					continue;
+        }
+
+        // check to see if we need an operand
+        if (opcode.operand && !operand) {
+          // throw errorMessages[5];
+					errors.push({ name: errorMessages[5], line: instruction.line });
+        }
+
+        // if we have an operand
+        // we can only make it this far if we have one and need it
+        if (operand) {
+
+          // were either a hex address literal, or a symbol
+          if (operand.match(addressRegex)) {
+            operand = parseInt(operand, 16);
+            if (operand > 0x0FFF) {
+              // throw errorMessages[6];
+							errors.push({ name: errorMessages[6], line: instruction.line });
+            }
+          } else {
+            if (!(operand in symbols)) {
+              // throw errorMessages[10];
+							errors.push({ name: errorMessages[10], line: instruction.line });
+            }
+
+            operand = symbols[operand];
+          }
+        }
+
+        // create hexcode
+        instruction.hexcode = ((opcode.opcode << 12) | operand);
       }
 
       return {
-        source: source,
-        instructions: instructions,
-        hexcodes: hexcodes,
-        errors: errors
+        origin: origin,
+        program: parsed,
+        symbols: symbols,
+				errors: errors
       };
     }
   };

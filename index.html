@@ -7,9 +7,6 @@
 	<meta charset="utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
-	<!-- fontawesome -->
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
 	<!-- angularjs -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 
@@ -39,25 +36,31 @@
 	<!-- application directives -->
 	<script src="src/directives/assembly.js"></script>
 	<script src="src/directives/editor.js"></script>
+	<script src="src/directives/interface.js"></script>
 	<script src="src/directives/machine.js"></script>
 	<script src="src/directives/memory.js"></script>
 	<script src="src/directives/navbar.js"></script>
+	<script src="src/directives/registers.js"></script>
+	<script src="src/directives/status.js"></script>
 
 	<!-- emulator -->
 	<script src="src/services/emulator/assembler.js"></script>
 	<script src="src/services/emulator/cpu.js"></script>
 	<script src="src/services/emulator/memory.js"></script>
 	<script src="src/services/emulator/opcodes.js"></script>
-	<script src="src/services/emulator/register8.js"></script>
-	<script src="src/services/emulator/register12.js"></script>
-	<script src="src/services/emulator/register16.js"></script>
 
 	<!-- application filters -->
+	<script src="src/filters/address.js"></script>
 	<script src="src/filters/base.js"></script>
 	<script src="src/filters/fixedlength.js"></script>
+	<script src="src/filters/hexcode.js"></script>
 	<script src="src/filters/memory.js"></script>
 	<script src="src/filters/output.js"></script>
-	<script src="src/filters/uppercase.js"></script>
+	<script src="src/filters/registers.js"></script>
+
+	<!-- application controllers -->
+	<script src="src/controllers/errors.js"></script>
+	<script src="src/controllers/input.js"></script>
 
 	<!-- application controller (always last) -->
 	<script src="src/controller.js"></script>
@@ -76,16 +79,23 @@
 <body ng-controller="MarieCtrl">
 	<navbar></navbar>
 	<div class="container">
+		<interface></interface>
 		<div class="row">
+			<div class="col-md-4">
+				<editor></editor>
+		  </div>
 		  <div class="col-md-5">
-		  	<machine></machine>
 				<assembly></assembly>
 		  </div>
-		  <div class="col-md-7">
-		  	<editor></editor>
-				<memory></memory>
+			<div class="col-md-2">
+				<registers></registers>
+			</div>
+		  <div class="col-md-1">
+		  	<machine></machine>
 		  </div>
 		</div>
+		<status></status>
+		<memory></memory>
 	</div>
 </body>
 </html>

@@ -3,11 +3,11 @@
 angular.module('MarieSimulator').filter("outputfilter", function() {
   return function(input, filter) {
       switch (filter) {
-        case "decimal":
+        case "dec":
+					input = (input > 0x7F) ? input - 0x100 : input;
           return input.toString(10);
-        case "hexadecimal":
-          input = input.toString(16)
-          input = input.toUpperCase();
+        case "hex":
+          input = input.toString(16).toUpperCase()
           while (input.length < 4) {
             input = '0'+input;
           }

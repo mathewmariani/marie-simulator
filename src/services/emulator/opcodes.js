@@ -1,29 +1,32 @@
-angular.module('MarieSimulator')
-  .service('opcodes', [function () {
-  var opcodes = {
-    JNS: 0,
-    LOAD: 1,
-    STORE: 2,
-    ADD: 3,
-    SUBT: 4,
-    INPUT: 5,
-    OUTPUT: 6,
-    HALT: 7,
-    SKIPCOND: 8,
-    JUMP: 9,
-    CLEAR: 10,
+(function (angular) {
+  'use strict';
+  angular.module('MarieSimulator')
+    .service('opcodes', [function () {
+    var opcodes = {
+      JNS: { opcode: 0x0, operand: true, base: undefined },
+      LOAD: { opcode: 0x1, operand: true, base: undefined },
+      STORE: { opcode: 0x2, operand: true, base: undefined },
+      ADD: { opcode: 0x3, operand: true, base: undefined },
+      SUBT: { opcode: 0x4, operand: true, base: undefined },
+      INPUT: { opcode: 0x5, operand: false, base: undefined },
+      OUTPUT: { opcode: 0x6, operand: false, base: undefined },
+      HALT: { opcode: 0x7, operand: false, base: undefined },
+      SKIPCOND: { opcode: 0x8, operand: true, base: undefined },
+      JUMP: { opcode: 0x9, operand: true, base: undefined },
+      CLEAR: { opcode: 0xA, operand: false, base: undefined },
 
-    ADDI: 11,
-    JUMPI: 12,
-    LOADI: 13,
-    STOREI: 14,
+      ADDI: { opcode: 0xB, operand: true, base: undefined },
+      JUMPI: { opcode: 0xC, operand: true, base: undefined },
+      LOADI: { opcode: 0xD, operand: true, base: undefined },
+      STOREI: { opcode: 0xE, operand: true, base: undefined },
 
-    DEC: -1,
-    OCT: -2,
-    HEX: -3,
-    ORG: -4,
-    END: -5
-  };
+      DEC: { opcode: -1, operand: true, base: 10 },
+      OCT: { opcode: -2, operand: true, base: 8 },
+      HEX: { opcode: -3, operand: true, base: 16 },
+      ORG: { opcode: -4, operand: true, base: 16 },
+      END: { opcode: -5, operand: false, base: undefined },
+    };
 
-  return opcodes;
-}]);
+    return opcodes;
+  }]);
+} (window.angular));

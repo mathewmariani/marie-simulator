@@ -1,0 +1,27 @@
+<!-- header -->
+<div class="modal-header">
+	<h3 class="modal-title">Assembly Errors</h3>
+</div>
+
+<!-- body -->
+<div class="modal-body">
+
+	<!-- leading text -->
+	<p class="lead">
+		{{ $errorModal.errors.length }} error(s) found. Assembly unsuccessful.
+	</p>
+
+	<!-- error list -->
+	<ul class="list-group">
+		<li ng-repeat="error in $errorModal.errors" class="list-group-item">
+			<span class="badge">{{ error.line }}</span>
+			{{ error.name }}
+		</li>
+	</ul>
+	
+</div>
+
+<!-- footer -->
+<div class="modal-footer">
+	<button class="btn btn-primary" type="button" ng-click="$errorModal.ok()">Close</button>
+</div>
