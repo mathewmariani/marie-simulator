@@ -1,1 +1,0 @@
-!function(t){"use strict";t.module("MarieSimulator").filter("hexcode",function(){return function(t){for(t=t||0,t=t.toString(16).toUpperCase();t.length<4;)t="0"+t;return t}})}(window.angular);

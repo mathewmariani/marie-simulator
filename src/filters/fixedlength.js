@@ -1,1 +1,0 @@
-angular.module("MarieSimulator").filter("fixedLength",function(){return function(n,r){for(;n.length<r;)n="0"+n;return n}});
