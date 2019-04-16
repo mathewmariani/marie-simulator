@@ -1,5 +1,4 @@
 const gulp = require("gulp")
-const minify = require("gulp-minify")
 const browserSync = require("browser-sync")
 const cp = require("child_process")
 
@@ -24,22 +23,5 @@ gulp.task("build", function() {
 	gulp.src("./src/assets/js/mixins/*.js").pipe(gulp.dest("./build/assets/js/mixins"))
 })
 
-gulp.task("minify", function() {
-	const options = {
-		ext: {
-			min:".js"
-		},
-		noSource: true,
-		mangle: false
-	}
-
-	gulp.src("./build/**/*.js")
-		.pipe(minify(options))
-		.pipe(gulp.dest(function(file) {
-			return file.base
-		}))
-})
-
 gulp.task("default", ["build", "browser-sync"])
-gulp.task("release", ["build", "minify"])
 
