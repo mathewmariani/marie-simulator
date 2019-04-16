@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- charset -->
+	<meta charset="utf-8">
+
+	<!-- open graph metadata -->
+	<meta property="og:title" content="Marie Simulator"/> 
+	<meta property="og:site_name" content="Marie Simulator"/> 
+	<meta property="og:type" content="website"/>
+	<meta property="og:url" content="http://mathewmariani.com/marie-simulator"/> 
+
+	<!-- metadata -->
+	<meta name="description" content="MARIE Assembly Language">
+	<meta name="keywords" content="marie assembly language simulator hardware architecture">
+	<meta name="author" content="Mathew Mariani"/>
+
+	<!-- viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- title -->
+	<title>Marie Simulator</title>
+
+	<!-- vuejs -->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<!-- font awesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+	<!-- components -->
+	<script src="assets/js/components/assembly.js"></script>
+	<script src="assets/js/components/download.js"></script>
+	<script src="assets/js/components/editor.js"></script>
+	<script src="assets/js/components/examples.js"></script>
+	<script src="assets/js/components/errors.js"></script>
+	<script src="assets/js/components/interface.js"></script>
+	<script src="assets/js/components/memory.js"></script>
+	<script src="assets/js/components/output.js"></script>
+	<script src="assets/js/components/registers.js"></script>
+	<script src="assets/js/components/status.js"></script>
+	<script src="assets/js/components/watch.js"></script>
+
+	<!-- filters -->
+	<script src="assets/js/filters/base.js"></script>
+
+	<!-- mixins -->
+	<script src="assets/js/mixins/assembler.js"></script>
+	<script src="assets/js/mixins/cpu.js"></script>
+	<script src="assets/js/mixins/machine.js"></script>
+	<script src="assets/js/mixins/memory.js"></script>
+	<script src="assets/js/mixins/opcodes.js"></script>
+
+	<!-- analytics-->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-58519049-2', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+	<!-- FIXME: move me somewhere else -->
+	<style type="text/css">
+		#editor {
+			display: block;
+			height: 260px;
+			width: 100%;
+			margin-bottom: 1rem;
+		}
+
+		.btn-light {
+			border: 1px solid #ced4da;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container" id="marie-app">
+		<!-- 		
+		<div
+			v-debug:flags="machineFlags"
+		></div>
+		-->
+		<div class="container-fluid">
+			<div class="card" style="margin-top:20px; margin-bottom:20px;">
+				<div class="card-header">
+					<ul class="nav nav-tabs card-header-tabs">
+						<li class="nav-item">
+							<a class="nav-link active">
+								MARIE 
+								<span
+									class="text-primary spinner-border spinner-border-sm"
+									role="status"
+									aria-hidden="true"
+									v-if="machineFlags.running"
+								></span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/cheatsheet.md">
+								Cheatsheet
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/student_resource.md">
+								Resources
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" target="_blank" href="https://github.com/mathewmariani/MARIE-Examples">
+								Examples
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator">
+								Github
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="card-body">			
+					<status
+						v-bind:message="machine.status"
+					></status>
+ 					<div class="row">
+						<div class="col-md-6">
+							<editor
+								v-bind:content="content"
+								v-on:change-content="changeContent"
+							></editor>
+						</div>
+						<div class="col-md-4">
+							<registers
+								v-bind:ac="registers.ac"
+								v-bind:ir="registers.ir"
+								v-bind:mar="registers.mar"
+								v-bind:mbr="registers.mbr"
+								v-bind:pc="registers.pc"
+								v-bind:outreg="registers.outreg"
+								v-bind:inreg="registers.inreg"
+							></registers>
+						</div>
+						<div class="col-md-2">
+							<outputs
+								v-bind:stuff="machine.outputs"
+								v-bind:filter="filter"
+							></outputs>
+						</div>
+					</div>
+					<errors
+						v-bind:errors="assembly.errors"
+					></errors>
+				</div>
+				<interface
+					v-bind:flags="machineFlags"
+					v-on:assemble="onAssemble"
+					v-on:reset="onReset"
+					v-on:stop="onStop"
+					v-on:pause="onPause"
+					v-on:run="onRun"
+					v-on:step="onStep"
+					v-on:delay="onDelay"
+					v-on:filter="onFilter"
+					v-on:trash="onTrash"
+					v-on:settle="onSettle"
+				></interface>
+				<div class="card-header">
+					<!-- FIXME: use directives or components (maybe?) -->
+					<ul class="nav nav-tabs card-header-tabs" id="myTab">
+						<li class="nav-item">
+							<a class="nav-link active" id="memory-tab" href="#memory" role="tab">Memory</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								id="assembly-tab"
+								href="#assembly"
+								role="tab"
+								v-bind:class="{ 'disabled': !machineFlags.assembled }"
+							>Assembly</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								id="watch-tab"
+								href="#watch"
+								role="tab"
+								v-bind:class="{ 'disabled': !machineFlags.assembled }"
+							>Watch</a>
+						</li>
+						<!-- FIXME:
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								id="download-tab"
+								href="#download"
+								role="tab"
+								v-bind:class="{ 'disabled': true }"
+							>Download</a>
+						</li>
+						-->
+					</ul>
+				</div>
+				<div class="card-body tab-content" style="height:300px; max-height:300px; overflow: scroll;">
+					<memory
+						v-bind:memory="machine.memory"
+						v-bind:pc="registers.pc"
+						v-bind:mar="registers.mar"
+					></memory>
+					<assembly
+						v-bind:program="assembly.program"
+						v-bind:pc="registers.pc"
+						v-bind:mar="registers.mar"
+					></assembly>
+					<watch
+						v-bind:symbols="assembly.symbols"
+						v-bind:memory="machine.memory"
+					></watch>
+					<!-- FIXME:
+					<download
+					></download>
+					-->
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- ace editor -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js" type="text/javascript" crossorigin="anonymous"></script>
+
+	<!-- application -->
+	<script src="assets/js/index.js"></script>
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+	<!-- bootstrap -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$('#myTab a').on('click', function (e) {
+			e.preventDefault()
+			$(this).tab('show')
+		});
+	</script>
+
+</body>
+
+</html>

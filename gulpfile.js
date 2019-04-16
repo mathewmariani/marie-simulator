@@ -1,24 +1,45 @@
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var browserSync = require('browser-sync').create();
+const gulp = require("gulp")
+const minify = require("gulp-minify")
+const browserSync = require("browser-sync")
+const cp = require("child_process")
 
-// Static server
-gulp.task('serve', function() {
-  browserSync.init({
-    server: {
-      baseDir: "./"
-    }
-  });
-  gulp.watch(["./**/*.html", "./**/*.js"]).on('change', browserSync.reload);
-});
+gulp.task("browser-sync", function() {
+	browserSync({
+		server: {
+			baseDir: "./build"
+		}
+	})
 
-gulp.task('build', function() {
-  // TODO: minify for faster access
-  gulp.src('./index.html').pipe(gulp.dest('./build/'));
-  gulp.src('./views/**/*.html').pipe(gulp.dest('./build/views/'));
-  gulp.src('./assets/**/*.js').pipe(gulp.dest('./build/assets/'));
-  gulp.src('./assets/**/*.css').pipe(gulp.dest('./build/assets/'));
-  gulp.src('./src/**/*.js').pipe(uglify()).pipe(gulp.dest('./build/src/'));
-});
+	// FIXME: wasteful...
+	gulp.watch(["./src/**/*.html", "./src/**/*.js"], ['build'])
+	gulp.watch(["./build/**/*.html", "./build/**/*.js"]).on('change', browserSync.reload)
+})
 
-gulp.task('default', ['serve']);
+gulp.task("build", function() {
+	gulp.src("./src/index.html").pipe(gulp.dest("./build/"))
+	gulp.src("./src/assets/js/index.js").pipe(gulp.dest("./build/assets/js"))
+
+	gulp.src("./src/assets/js/components/*.js").pipe(gulp.dest("./build/assets/js/components"))
+	gulp.src("./src/assets/js/filters/*.js").pipe(gulp.dest("./build/assets/js/filters"))
+	gulp.src("./src/assets/js/mixins/*.js").pipe(gulp.dest("./build/assets/js/mixins"))
+})
+
+gulp.task("minify", function() {
+	const options = {
+		ext: {
+			min:".js"
+		},
+		noSource: true,
+		mangle: false
+	}
+
+	gulp.src("./build/**/*.js")
+		.pipe(minify(options))
+		.pipe(gulp.dest(function(file) {
+			return file.base
+		}))
+})
+
+gulp.task("default", ["build", "browser-sync"])
+gulp.task("release", ["build", "minify"])
+
