@@ -4,8 +4,12 @@
 	"description": "An assembly languague simulator written in JavaScript using VueJS",
 	"author": "Mathew Mariani",
 	"license": "MIT",
+	"scripts": {
+		"build": "ts-node scripts/build.ts"
+	},
 	"devDependencies": {
-		"gulp": "^3.8.8",
-		"browser-sync": "^1.3.7"
+		"glob": "^10.3.10",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.3"
 	}
 }

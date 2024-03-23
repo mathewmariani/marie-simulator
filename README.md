@@ -1,10 +1,7 @@
-# MARIE Simulator [![Build Status](https://travis-ci.org/mathewmariani/marie-simulator.svg?branch=master)](https://travis-ci.org/mathewmariani/marie-simulator)
+# MARIE Simulator
 An assembly language simulator written in Javascript with VueJS
 
-Follow development on the [Trello Board](https://trello.com/b/JW47LSjx/marie-simulator)
-
 ## Cheatsheet
-
 #### Registers
 **AC**, a 16-bit accumulator<br>
 **IR**, a 16-bit register which holds an instruction immediately preceding its execution.<br>
@@ -124,4 +121,4 @@ M[MAR] ← MBR
 ## Acknowledgements
 Thank you to Marco Schweighauser and his very helpful blog [post](https://www.mschweighauser.com/make-your-own-assembler-simulator-in-javascript-part1/)
 
-Essentials of Computer Organization and Architecture, Second Edition by Linda Null and Julia Lobur for the creation of the [Marie Simulator]( http://computerscience.jbpub.com/ecoa/2e/student_resources.cfm)
+Essentials of Computer Organization and Architecture, Second Edition by Linda Null and Julia Lobur for the creation of the [Marie Simulator](http://computerscience.jbpub.com/ecoa/2e/student_resources.cfm)
