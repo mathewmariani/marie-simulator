@@ -63,6 +63,9 @@ export const assembler = {
 				// [1]LABEL, [2]OPCODE [3]OPERAND
 				var interpreter = marieRegex.exec(line)
 
+				if (interpreter[GROUP_OPCODE] === undefined)
+					continue;
+
 				// check for other instructions
 				var label = interpreter[GROUP_LABEL]
 				var opcode = interpreter[GROUP_OPCODE].toUpperCase()
