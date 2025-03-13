@@ -1,4 +1,4 @@
-const editor = {
+export const editor = {
 	methods: {
 		_clear: function() {
 			// TODO: ...

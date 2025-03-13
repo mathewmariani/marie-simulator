@@ -28,6 +28,7 @@ jobs:
           npm run build
 
       - name: Deploy 🚀
+        if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: website
+          folder: dist

@@ -1,4 +1,4 @@
-const opcodes = {
+export const opcodes = {
 	data: function () {
 		return {
 			opcodes: {
