@@ -14,22 +14,22 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="{CheatSheetLink()}">
+          <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/notes/cheatsheet.md">
             Cheatsheet
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="{StudenResourceLink()}">
+          <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/notes/student_resource.md">
             Resources
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="{ExamplesLink()}">
+          <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/MARIE-Examples">
             Examples
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="{GitHubLink()}">
+          <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator">
             Github
           </a>
         </li>
