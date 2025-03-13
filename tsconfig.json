@@ -6,8 +6,7 @@
   ],
   "exclude": [
     "dist",
-    "assignments",
-    "build"
+    "notes"
   ],
   "compilerOptions": {
     "jsx": "preserve"

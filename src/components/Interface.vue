@@ -73,22 +73,22 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+  import { ref, defineProps, defineEmits } from 'vue';
 
-const props = defineProps({
-  flags: Object,
-});
+  const props = defineProps({
+    flags: Object,
+  });
 
-const emit = defineEmits([
-  'assemble', 'reset', 'stop', 'run', 'delay', 'filter', 'trash', 'settle'
-]);
+  const emit = defineEmits([
+    'assemble', 'reset', 'stop', 'run', 'delay', 'filter', 'trash', 'settle'
+  ]);
 
-const input = ref({
-  value: '',
-  filter: 16,
-});
+  const input = ref({
+    value: '',
+    filter: 16,
+  });
 
-const setFilter = (f) => {
-  input.value.filter = f;
-};
+  const setFilter = (f) => {
+    input.value.filter = f;
+  };
 </script>
