@@ -1,4 +1,4 @@
-const assembler = {
+export const assembler = {
 	methods: {
 		assemble: function(input) {
 			// [1]LABEL, [2]OPCODE [3]OPERAND /[4]COMMENT
@@ -62,6 +62,9 @@ const assembler = {
 
 				// [1]LABEL, [2]OPCODE [3]OPERAND
 				var interpreter = marieRegex.exec(line)
+
+				if (interpreter[GROUP_OPCODE] === undefined)
+					continue;
 
 				// check for other instructions
 				var label = interpreter[GROUP_LABEL]

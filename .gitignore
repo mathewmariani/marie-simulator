@@ -1,11 +1,25 @@
+# visual studio project file
+.vscode/*
+!.vscode/launch.json
+!.vscode/extensions.json
+
 # build output
-website/
+build/
+dist/
+
+# symlinks
+src/modules
+*.symlink
 
 # intermediate files
-.cache/*
+.cache/
+.astro/
 
 # Dependency directories
 node_modules/
+
+# development tools
+emsdk/
 
 # macOS
 .DS_Store

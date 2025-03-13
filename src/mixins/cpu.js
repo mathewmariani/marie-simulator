@@ -1,4 +1,4 @@
-const cpu = {
+export const cpu = {
 	methods: {
 		settle: function (value) {
 			this.registers.inreg = ((value >>> 0) & 0xFF)
@@ -69,8 +69,7 @@ const cpu = {
 				break
 			case this.opcodes.OUTPUT.opcode:
 				this.registers.outreg = ((this.registers.ac >>> 0) & 0xFF)
-				// this.machine.outputs.push(this.registers.outreg)
-				this.$set(this.machine.outputs, this.machine.outputs.length, this.registers.outreg)
+				this.machine.outputs.push(this.registers.outreg)
 				break
 			case this.opcodes.HALT.opcode:
 				this.machine.halt = true

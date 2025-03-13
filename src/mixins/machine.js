@@ -1,4 +1,4 @@
-const machine = {
+export const machine = {
 	data: function () {
 		return {
 			status: [
