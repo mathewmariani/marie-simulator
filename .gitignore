@@ -7,14 +7,6 @@
 build/
 dist/
 
-# symlinks
-src/modules
-*.symlink
-
-# intermediate files
-.cache/
-.astro/
-
 # Dependency directories
 node_modules/
 

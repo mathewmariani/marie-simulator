@@ -135,20 +135,20 @@
 </template>
   
 <script>
-  import AssemblyComponent from "../components/Assembly.vue";
-  import EditorComponent from "../components/Editor.vue";
-  import ErrorsComponent from "../components/Errors.vue";
-  import InterfaceComponent from "../components/Interface.vue";
-  import MemoryComponent from "../components/Memory.vue";
-  import OutputComponent from "../components/Output.vue";
-  import RegistersComponent from "../components/Registers.vue";
-  import StatusComponent from "../components/Status.vue";
-  import WatchComponent from "../components/Watch.vue";
-  import { assembler } from "../mixins/assembler";
-  import { cpu } from "../mixins/cpu";
-  import { machine } from "../mixins/machine";
-  import { memory } from "../mixins/memory";
-  import { opcodes } from "../mixins/opcodes";
+  import AssemblyComponent from "./components/Assembly.vue";
+  import EditorComponent from "./components/Editor.vue";
+  import ErrorsComponent from "./components/Errors.vue";
+  import InterfaceComponent from "./components/Interface.vue";
+  import MemoryComponent from "./components/Memory.vue";
+  import OutputComponent from "./components/Output.vue";
+  import RegistersComponent from "./components/Registers.vue";
+  import StatusComponent from "./components/Status.vue";
+  import WatchComponent from "./components/Watch.vue";
+  import { assembler } from "@/assembler";
+  import { cpu } from "@/cpu";
+  import { machine } from "@/machine";
+  import { memory } from "@/memory";
+  import { opcodes } from "@/opcodes";
   
   export default {
     mixins: [assembler, cpu, machine, memory, opcodes],
