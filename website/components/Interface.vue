@@ -4,19 +4,19 @@
       <div class="btn-toolbar" role="toolbar">
         <div class="btn-group mr-2" role="group">
           <button @click="emit('assemble')" class="btn btn-primary" :disabled="flags.running">
-            <i class="fas fa-cogs"></i>
+            <i class="bi bi-gear-fill"></i>
           </button>
           <button @click="emit('reset')" class="btn btn-primary" :disabled="!flags.assembled || flags.running">
-            <i class="fas fa-undo"></i>
+            <i class="bi bi-arrow-clockwise"></i>
           </button>
         </div>
         
         <div class="btn-group mr-2" role="group">
           <button @click="emit('stop')" class="btn btn-primary" :disabled="!flags.running">
-            <i class="fas fa-stop"></i>
+            <i class="bi bi-stop-fill"></i>
           </button>
           <button @click="emit('run')" class="btn btn-primary" :disabled="!flags.assembled || flags.halted || flags.interrupted">
-            <i class="fas fa-play"></i>
+            <i class="bi bi-play-fill"></i>
           </button>
         </div>
 
