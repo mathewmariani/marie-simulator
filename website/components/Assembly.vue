@@ -12,7 +12,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(instruction, index) in program" :key="index" :class="{ 'table-warning': index === mar, 'table-success': index === pc }">
+          <tr
+            v-for="(instruction, index) in program"
+            :key="index"
+            :class="{
+              'table-warning': index === mar,
+              'table-success': index === pc,
+            }"
+          >
             <td>{{ toHex(instruction.address, 4) }}</td>
             <td>{{ instruction.label }}</td>
             <td>{{ instruction.opcode }}</td>
@@ -26,16 +33,16 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      program: Array,
-      pc: Number,
-      mar: Number
+export default {
+  props: {
+    program: Array,
+    pc: Number,
+    mar: Number,
+  },
+  methods: {
+    toHex(value, length) {
+      return Number(value).toString(16).toUpperCase().padStart(length, "0");
     },
-    methods: {
-      toHex(value, length) {
-        return Number(value).toString(16).toUpperCase().padStart(length, "0");
-      }
-    }
-  };
+  },
+};
 </script>

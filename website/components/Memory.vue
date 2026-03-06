@@ -16,8 +16,8 @@
               v-for="(value, colIndex) in row"
               :key="colIndex"
               :class="{
-                'table-warning': (rowIndex * 16 + colIndex) === mar,
-                'table-success': (rowIndex * 16 + colIndex) === pc
+                'table-warning': rowIndex * 16 + colIndex === mar,
+                'table-success': rowIndex * 16 + colIndex === pc,
               }"
             >
               {{ toHex(value, 4) }}
@@ -30,30 +30,30 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      memory: Array,
-      pc: Number,
-      mar: Number
-    },
-    computed: {
-      // Chunk the memory array into rows of 16 elements
-      chunkedMemory() {
-        let chunked = [];
-        for (let i = 0; i < this.memory.length; i += 16) {
-          chunked.push(this.memory.slice(i, i + 16));
-        }
-        return chunked;
+export default {
+  props: {
+    memory: Array,
+    pc: Number,
+    mar: Number,
+  },
+  computed: {
+    // Chunk the memory array into rows of 16 elements
+    chunkedMemory() {
+      let chunked = [];
+      for (let i = 0; i < this.memory.length; i += 16) {
+        chunked.push(this.memory.slice(i, i + 16));
       }
+      return chunked;
     },
-    methods: {
-      toHex(value, fixed) {
-        let val = Number(value).toString(16).toUpperCase();
-        while (val.length < fixed) {
-          val = '0' + val;
-        }
-        return val;
+  },
+  methods: {
+    toHex(value, fixed) {
+      let val = Number(value).toString(16).toUpperCase();
+      while (val.length < fixed) {
+        val = "0" + val;
       }
-    }
-  };
+      return val;
+    },
+  },
+};
 </script>
