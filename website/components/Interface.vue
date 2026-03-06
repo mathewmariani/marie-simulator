@@ -1,5 +1,5 @@
 <template>
-  <ul class="list-group list-group-flush">
+  <div class="list-group list-group-flush">
     <li class="list-group-item">
       <div class="btn-toolbar" role="toolbar">
         <div class="btn-group mr-2" role="group">
@@ -69,7 +69,7 @@
         </div>
       </div>
     </li>
-  </ul>
+  </div>
 </template>
 
 <script setup>

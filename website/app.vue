@@ -1,135 +1,137 @@
 <template>
-  <div class="card" style="margin-top:20px; margin-bottom:20px;">
-    <div class="card-header">
-      <ul class="nav nav-tabs card-header-tabs">
-        <li class="nav-item">
-          <a class="nav-link active">
-            MARIE 
-            <span
-              class="text-primary spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-              v-if="machineFlags.running"
-            ></span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/notes/cheatsheet.md">
-            Cheatsheet
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/notes/student_resource.md">
-            Resources
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/MARIE-Examples">
-            Examples
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator">
-            Github
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="card-body">			
-      <StatusComponent
-        client:load
-        v-bind:message="machine.status"
-      ></StatusComponent>
-        <div class="row">
-          <div class="col-md-6">
-            <EditorComponent
-              client:load
-              v-bind:content="content"
-              v-on:change-content="changeContent"
-            ></EditorComponent>
-          </div>
-        <div class="col-md-4">
-          <RegistersComponent
-            client:load
-            v-bind:ac="registers.ac"
-            v-bind:ir="registers.ir"
-            v-bind:mar="registers.mar"
-            v-bind:mbr="registers.mbr"
-            v-bind:pc="registers.pc"
-            v-bind:outreg="registers.outreg"
-            v-bind:inreg="registers.inreg"
-          ></RegistersComponent>
-        </div>
-        <div class="col-md-2">
-          <OutputComponent
-            client:load
-            v-bind:stuff="machine.outputs"
-            v-bind:filter="filter"
-          ></OutputComponent>
-        </div>
+  <div class="py-3">
+    <div class="card">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link active">
+              MARIE 
+              <span
+                class="text-primary spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+                v-if="machineFlags.running"
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/notes/cheatsheet.md">
+              Cheatsheet
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator/blob/master/notes/student_resource.md">
+              Resources
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/MARIE-Examples">
+              Examples
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://github.com/mathewmariani/marie-simulator">
+              Github
+            </a>
+          </li>
+        </ul>
       </div>
-      <ErrorsComponent
+      <div class="card-body">			
+        <StatusComponent
+          client:load
+          v-bind:message="machine.status"
+        ></StatusComponent>
+          <div class="row">
+            <div class="col-md-6">
+              <EditorComponent
+                client:load
+                v-bind:content="content"
+                v-on:change-content="changeContent"
+              ></EditorComponent>
+            </div>
+          <div class="col-md-4">
+            <RegistersComponent
+              client:load
+              v-bind:ac="registers.ac"
+              v-bind:ir="registers.ir"
+              v-bind:mar="registers.mar"
+              v-bind:mbr="registers.mbr"
+              v-bind:pc="registers.pc"
+              v-bind:outreg="registers.outreg"
+              v-bind:inreg="registers.inreg"
+            ></RegistersComponent>
+          </div>
+          <div class="col-md-2">
+            <OutputComponent
+              client:load
+              v-bind:stuff="machine.outputs"
+              v-bind:filter="filter"
+            ></OutputComponent>
+          </div>
+        </div>
+        <ErrorsComponent
+          client:load
+          v-bind:errors="assembly.errors"
+        ></ErrorsComponent>
+      </div>
+      <InterfaceComponent
         client:load
-        v-bind:errors="assembly.errors"
-      ></ErrorsComponent>
-    </div>
-    <InterfaceComponent
-      client:load
-      v-bind:flags="machineFlags"
-      v-on:assemble="onAssemble"
-      v-on:reset="onReset"
-      v-on:stop="onStop"
-      v-on:pause="onPause"
-      v-on:run="onRun"
-      v-on:step="onStep"
-      v-on:delay="onDelay"
-      v-on:filter="onFilter"
-      v-on:trash="onTrash"
-      v-on:settle="onSettle"
-    ></InterfaceComponent>
-    <div class="card-header">
-      <ul class="nav nav-tabs card-header-tabs" id="myTab">
-        <li class="nav-item">
-          <a class="nav-link active" id="memory-tab" href="#memory" role="tab">Memory</a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            id="assembly-tab"
-            href="#assembly"
-            role="tab"
-            v-bind:class="{ 'disabled': !machineFlags.assembled }"
-          >Assembly</a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            id="watch-tab"
-            href="#watch"
-            role="tab"
-            v-bind:class="{ 'disabled': !machineFlags.assembled }"
-          >Watch</a>
-        </li>
-      </ul>
-    </div>
-    <div class="card-body tab-content" style="height:300px; max-height:300px; overflow: scroll;">
-      <MemoryComponent
-        client:load
-        v-bind:memory="machine.memory"
-        v-bind:pc="registers.pc"
-        v-bind:mar="registers.mar"
-      ></MemoryComponent>
-      <AssemblyComponent
-        client:load
-        v-bind:program="assembly.program"
-        v-bind:pc="registers.pc"
-        v-bind:mar="registers.mar"
-      ></AssemblyComponent>
-      <WatchComponent
-        client:load
-        v-bind:symbols="assembly.symbols"
-        v-bind:memory="machine.memory"
-      ></WatchComponent>
+        v-bind:flags="machineFlags"
+        v-on:assemble="onAssemble"
+        v-on:reset="onReset"
+        v-on:stop="onStop"
+        v-on:pause="onPause"
+        v-on:run="onRun"
+        v-on:step="onStep"
+        v-on:delay="onDelay"
+        v-on:filter="onFilter"
+        v-on:trash="onTrash"
+        v-on:settle="onSettle"
+      ></InterfaceComponent>
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs" id="myTab">
+          <li class="nav-item">
+            <a class="nav-link active" id="memory-tab" data-bs-toggle="tab" data-bs-target="#memory-tab-pane">Memory</a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="assembly-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#assembly-tab-pane"
+              v-bind:class="{ 'disabled': !machineFlags.assembled }"
+            >Assembly</a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="watch-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#watch-tab-pane"
+              v-bind:class="{ 'disabled': !machineFlags.assembled }"
+            >Watch</a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body tab-content" style="height:300px; max-height:300px; overflow: scroll;">
+        <MemoryComponent
+          client:load
+          v-bind:memory="machine.memory"
+          v-bind:pc="registers.pc"
+          v-bind:mar="registers.mar"
+        ></MemoryComponent>
+        <AssemblyComponent
+          client:load
+          v-bind:program="assembly.program"
+          v-bind:pc="registers.pc"
+          v-bind:mar="registers.mar"
+        ></AssemblyComponent>
+        <WatchComponent
+          client:load
+          v-bind:symbols="assembly.symbols"
+          v-bind:memory="machine.memory"
+        ></WatchComponent>
+      </div>
     </div>
   </div>
 </template>
