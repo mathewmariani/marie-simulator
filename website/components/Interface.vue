@@ -46,7 +46,7 @@
 
         <div class="btn-group mr-2" role="group">
           <button @click="emit('trash')" class="btn btn-primary">
-            <i class="fas fa-trash"></i>
+            <i class="bi bi-trash"></i>
           </button>
         </div>
 
